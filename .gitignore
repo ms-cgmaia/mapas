@@ -1,6 +1,7 @@
 **/data/
 /dados/
 /shapes/
+/output/site/mapas/
 /docs/
 /sql/
 .DS_Store

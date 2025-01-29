@@ -1,0 +1,480 @@
+{
+  "states": {
+    "BR": {
+      "population_info": {
+        "total_population": 20000,
+        "urban_rural_distribution": "80% urbana / 20% rural",
+        "quilombola_qtd": 120000,
+        "ascendant_qtd": 50000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 20300,
+        "teams_qtd": 30000,
+        "ect": 2000,
+        "registrations": 1200000,
+        "links": 950000,
+        "followed": 800000
+      }
+    },
+    "AC": {
+      "population_info": {
+        "total_population": 1203,
+        "urban_rural_distribution": "72% urbana / 28% rural",
+        "quilombola_qtd": 1200,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 203,
+        "teams_qtd": 300,
+        "ect": 20,
+        "registrations": 12000,
+        "links": 9500,
+        "followed": 8000
+      }
+    },
+    "AL": {
+      "population_info": {
+        "total_population": 3351543,
+        "urban_rural_distribution": "75% urbana / 25% rural",
+        "quilombola_qtd": 1800,
+        "ascendant_qtd": 12000,
+        "coverage_rate": "87%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 400,
+        "teams_qtd": 600,
+        "ect": 50,
+        "registrations": 25000,
+        "links": 20000,
+        "followed": 15000
+      }
+    },
+    "AM": {
+      "population_info": {
+        "total_population": 4144597,
+        "urban_rural_distribution": "68% urbana / 32% rural",
+        "quilombola_qtd": 3000,
+        "ascendant_qtd": 8000,
+        "coverage_rate": "82%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 500,
+        "teams_qtd": 700,
+        "ect": 80,
+        "registrations": 40000,
+        "links": 35000,
+        "followed": 30000
+      }
+    },
+    "SP": {
+      "population_info": {
+        "total_population": 45919049,
+        "urban_rural_distribution": "95% urbana / 5% rural",
+        "quilombola_qtd": 500,
+        "ascendant_qtd": 100000,
+        "coverage_rate": "92%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 8000,
+        "teams_qtd": 12000,
+        "ect": 1500,
+        "registrations": 400000,
+        "links": 350000,
+        "followed": 300000
+      }
+    },
+    "RJ": {
+      "population_info": {
+        "total_population": 17264943,
+        "urban_rural_distribution": "94% urbana / 6% rural",
+        "quilombola_qtd": 1000,
+        "ascendant_qtd": 40000,
+        "coverage_rate": "89%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 5000,
+        "teams_qtd": 7000,
+        "ect": 1000,
+        "registrations": 250000,
+        "links": 200000,
+        "followed": 180000
+      }
+    },
+    "RS": {
+      "population_info": {
+        "total_population": 11377239,
+        "urban_rural_distribution": "88% urbana / 12% rural",
+        "quilombola_qtd": 4000,
+        "ascendant_qtd": 20000,
+        "coverage_rate": "90%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 3000,
+        "teams_qtd": 4000,
+        "ect": 500,
+        "registrations": 150000,
+        "links": 120000,
+        "followed": 100000
+      }
+    },
+    "BA": {
+      "population_info": {
+        "total_population": 15162564,
+        "urban_rural_distribution": "80% urbana / 20% rural",
+        "quilombola_qtd": 12000,
+        "ascendant_qtd": 40000,
+        "coverage_rate": "88%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 4500,
+        "teams_qtd": 7000,
+        "ect": 600,
+        "registrations": 300000,
+        "links": 250000,
+        "followed": 200000
+      }
+    },
+    "CE": {
+      "population_info": {
+        "total_population": 9187103,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 2000,
+        "ascendant_qtd": 10000,
+        "coverage_rate": "86%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 3500,
+        "teams_qtd": 5000,
+        "ect": 400,
+        "registrations": 200000,
+        "links": 150000,
+        "followed": 120000
+      }
+    },
+    "DF": {
+      "population_info": {
+        "total_population": 3015268,
+        "urban_rural_distribution": "90% urbana / 10% rural",
+        "quilombola_qtd": 500,
+        "ascendant_qtd": 20000,
+        "coverage_rate": "91%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 200,
+        "teams_qtd": 300,
+        "ect": 30,
+        "registrations": 15000,
+        "links": 12000,
+        "followed": 10000
+      }
+    },
+    "ES": {
+      "population_info": {
+        "total_population": 4018653,
+        "urban_rural_distribution": "80% urbana / 20% rural",
+        "quilombola_qtd": 1000,
+        "ascendant_qtd": 8000,
+        "coverage_rate": "87%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1200,
+        "teams_qtd": 1800,
+        "ect": 200,
+        "registrations": 100000,
+        "links": 85000,
+        "followed": 70000
+      }
+    },
+    "GO": {
+      "population_info": {
+        "total_population": 7018354,
+        "urban_rural_distribution": "85% urbana / 15% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 15000,
+        "coverage_rate": "89%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 2200,
+        "teams_qtd": 3500,
+        "ect": 400,
+        "registrations": 180000,
+        "links": 160000,
+        "followed": 140000
+      }
+    },
+    "MA": {
+      "population_info": {
+        "total_population": 7075181,
+        "urban_rural_distribution": "60% urbana / 40% rural",
+        "quilombola_qtd": 2500,
+        "ascendant_qtd": 12000,
+        "coverage_rate": "80%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 2800,
+        "teams_qtd": 4200,
+        "ect": 350,
+        "registrations": 160000,
+        "links": 140000,
+        "followed": 120000
+      }
+    },
+    "MT": {
+      "population_info": {
+        "total_population": 3484466,
+        "urban_rural_distribution": "65% urbana / 35% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 8000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 2200,
+        "teams_qtd": 3200,
+        "ect": 250,
+        "registrations": 150000,
+        "links": 120000,
+        "followed": 100000
+      }
+    },
+    "MS": {
+      "population_info": {
+        "total_population": 2778986,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1000,
+        "ascendant_qtd": 4000,
+        "coverage_rate": "83%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1000,
+        "teams_qtd": 1500,
+        "ect": 150,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "MG": {
+      "population_info": {
+        "total_population": 21168791,
+        "urban_rural_distribution": "85% urbana / 15% rural",
+        "quilombola_qtd": 4000,
+        "ascendant_qtd": 20000,
+        "coverage_rate": "90%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 5000,
+        "teams_qtd": 7500,
+        "ect": 600,
+        "registrations": 350000,
+        "links": 300000,
+        "followed": 250000
+      }
+    },
+    "PB": {
+      "population_info": {
+        "total_population": 4018127,
+        "urban_rural_distribution": "80% urbana / 20% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 6000,
+        "coverage_rate": "87%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1500,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 50000,
+        "followed": 40000
+      }
+    },
+    "PR": {
+      "population_info": {
+        "total_population": 11433957,
+        "urban_rural_distribution": "84% urbana / 16% rural",
+        "quilombola_qtd": 3000,
+        "ascendant_qtd": 12000,
+        "coverage_rate": "89%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 4000,
+        "teams_qtd": 6000,
+        "ect": 400,
+        "registrations": 200000,
+        "links": 150000,
+        "followed": 120000
+      }
+    },
+    "PE": {
+      "population_info": {
+        "total_population": 9557071,
+        "urban_rural_distribution": "75% urbana / 25% rural",
+        "quilombola_qtd": 4000,
+        "ascendant_qtd": 15000,
+        "coverage_rate": "86%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 5000,
+        "teams_qtd": 7000,
+        "ect": 800,
+        "registrations": 250000,
+        "links": 200000,
+        "followed": 180000
+      }
+    },
+    "PI": {
+      "population_info": {
+        "total_population": 3273227,
+        "urban_rural_distribution": "68% urbana / 32% rural",
+        "quilombola_qtd": 2000,
+        "ascendant_qtd": 8000,
+        "coverage_rate": "82%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 2200,
+        "teams_qtd": 3000,
+        "ect": 350,
+        "registrations": 120000,
+        "links": 100000,
+        "followed": 80000
+      }
+    },
+    "RN": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "TO": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "SC": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "RR": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "AP": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "PA": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "SE": {
+      "population_info": {
+        "total_population": 3534265,
+        "urban_rural_distribution": "70% urbana / 30% rural",
+        "quilombola_qtd": 1500,
+        "ascendant_qtd": 5000,
+        "coverage_rate": "85%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1300,
+        "teams_qtd": 2000,
+        "ect": 250,
+        "registrations": 70000,
+        "links": 60000,
+        "followed": 50000
+      }
+    },
+    "RO": {
+      "population_info": {
+        "total_population": 1777225,
+        "urban_rural_distribution": "60% urbana / 40% rural",
+        "quilombola_qtd": 1000,
+        "ascendant_qtd": 4000,
+        "coverage_rate": "80%"
+      },
+      "ubs_info": {
+        "ubs_qtd": 1500,
+        "teams_qtd": 2000,
+        "ect": 300,
+        "registrations": 60000,
+        "links": 50000,
+        "followed": 40000
+      }
+    }
+  }
+}

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapas dos Estabelecimentos de Saúde da APS</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0072EY9B8Y"></script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5F948LBZ');</script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0072EY9B8Y');
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5F948LBZ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Menu lateral -->
+    <div id="idMenuLateral" class="menuLateral" style="width: 0px;">
+        <img src="assets/logos/logo_gov.png" alt="Logo Gov Br" style="padding: 20px; width: 50px;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <!-- Radio Buttons -->
+        <div id="radio-group-menu" style="display: block; width: 90%;">
+            <input type="radio" id="ruralidades-menu" name="map-type-menu" value="ruralidade" checked>
+            <label for="ruralidades-menu">Demografia</label>
+    
+            <input type="radio" id="equipes-menu" name="map-type-menu" value="equipe">
+            <label for="equipes-menu">Equipes</label>
+    
+            <input type="radio" id="cobertura-menu" name="map-type-menu" value="cobertura">
+            <label for="cobertura-menu">Cobertura APS</label>
+        </div>
+
+        <div class="dropdown-container-menu">
+            <select id="state-selector-menu">
+                <optgroup label="Norte">
+                    <option value="AC">Acre</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="PA">Pará</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="TO">Tocantins</option>
+                </optgroup>
+                <optgroup label="Nordeste">
+                    <option value="AL">Alagoas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="SE">Sergipe</option>
+                </optgroup>
+                <optgroup label="Centro-Oeste">
+                    <option value="DF">Distrito Federal</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                </optgroup>
+                <optgroup label="Sudeste">
+                    <option value="ES">Espírito Santo</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="SP">São Paulo</option>
+                </optgroup>
+                <optgroup label="Sul">
+                    <option value="PR">Paraná</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="SC">Santa Catarina</option>
+                </optgroup>
+            </select>
+        </div>
+        <!-- Dropdown de Macroregiões -->
+        <div class="dropdown-container-menu">
+            <select id="macroregion-selector-menu">
+                <option value="" disabled selected>Selecione uma Macrorregião</option>
+            </select>
+        </div> 
+
+        <div style="font-size: 0.7em; color:#badaff; padding: 20px;">Selecione um tipo de mapa e um estado para visualizar o mapa correspondente</div>
+
+        <div style="font-size: 0.7em; color:#badaff; padding: 20px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); text-align: center; width: 100%;">
+            <p>Secretaria de Atenção Primária à Saúde - SAPS<br />
+            Coordenação Geral de Monitoramento, Avaliação e Inteligência Analítica - CGMAIA<br />
+            Ministério da Saúde 2024 - Todos os direitos reservados.</p>
+        </div>
+    </div>
+    <!-- Cabeçalho -->
+    <div id="main">
+        <header>
+            <div class="header-content">
+                <img src="assets/logos/logo_gov.png" alt="Logo Gov Br" class="logo-left">
+                <h1>Mapa das Unidades Básicas de Saúde da APS</h1>
+                
+                <!-- botão do menuLateral -->
+                <img src="assets/logos/logo_ms_brasil.png" alt="Logo Ministério da Saúde" class="logo-right">
+                <button class="openbtn" onclick="openNav()">&#9776;</button>
+            </div>
+        </header>
+
+    <!-- Menu de Seleção -->
+    <div id="menu">
+        <div id="description">
+            <p>Selecione um tipo de mapa e um estado para visualizar o mapa correspondente:</p>
+        </div>
+    
+        <div class="selection-container">
+            <!-- Radio Buttons -->
+            <div id="radio-group">
+                <input type="radio" id="ruralidades" name="map-type" value="ruralidade" checked>
+                <label for="ruralidades">Demografia</label>
+    
+                <input type="radio" id="equipes" name="map-type" value="equipe">
+                <label for="equipes">Equipes</label>
+    
+                <input type="radio" id="cobertura" name="map-type" value="cobertura">
+                <label for="cobertura">Cobertura APS</label>
+            </div>
+    
+            <!-- Dropdown de Estados -->
+            <div class="dropdown-container">
+                <select id="state-selector">
+                    <optgroup label="Norte">
+                        <option value="AC">Acre</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="PA">Pará</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="TO">Tocantins</option>
+                    </optgroup>
+                    <optgroup label="Nordeste">
+                        <option value="AL">Alagoas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="SE">Sergipe</option>
+                    </optgroup>
+                    <optgroup label="Centro-Oeste">
+                        <option value="DF">Distrito Federal</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                    </optgroup>
+                    <optgroup label="Sudeste">
+                        <option value="ES">Espírito Santo</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="SP">São Paulo</option>
+                    </optgroup>
+                    <optgroup label="Sul">
+                        <option value="PR">Paraná</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="SC">Santa Catarina</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Dropdown de Macroregiões -->
+            <div class="dropdown-container">
+                <select id="macroregion-selector">
+                    <option value="" disabled selected>Selecione uma Macrorregião</option>
+                </select>
+            </div>            
+        </div>
+    </div>
+   
+    <main>
+        <!-- Mensagem de Carregando -->
+        <div id="loading-message"><img src="assets/icons/spinner.gif" alt="Carregando"><br />Carregando...</div>
+        
+        <!-- Área do mapa -->
+        <iframe id="iframe" src="./mapas/ruralidade/AC.html" frameborder="0" loading="lazy"></iframe>
+        
+        <!-- Janela de Informações -->
+        <div id="info-icon" onclick="toggleInfoModal()" title="Clique para mais informações" style="cursor: pointer;">i</div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>Secretaria de Atenção Primária à Saúde - SAPS<br />
+                Coordenação Geral de Monitoramento, Avaliação e Inteligência Analítica - CGMAIA<br />
+                Ministério da Saúde 2024 - Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Janela de Informações -->
+    <div id="info-modal">
+        <div class="info-content">
+            <h4>Nota informativa</h4>
+            <div id="info-text">Texto dinâmico</div>
+        </div>
+    </div>
+
+    <script>
+    
+    // funções de funcionamento do menu lateral 
+    function openNav() {
+        document.getElementById("idMenuLateral").style.width = "300px";
+        //document.getElementById("menuFooter").style.display = "none"; // Oculta o rodapé
+        
+        // se o texto estiver aberto, feche
+        const modal = document.getElementById('info-modal');
+        const icon = document.getElementById('info-icon');
+        if (modal.classList.contains('active')) {
+            modal.classList.toggle('active');
+            icon.textContent = 'i'; // Muda de volta para 'i' quando a janela está fechada
+            icon.classList.remove('rotating-to-x'); // Remove a animação de rotação para "X"
+            icon.classList.add('rotating-to-i'); // Inicia a animação de rotação para "i"
+        };
+    }
+
+    // Fecha o menu lateral
+    function closeNav() {
+        document.getElementById("idMenuLateral").style.width = "0";
+    }
+
+
+    // Textos para cada tipo de mapa
+    const texto_demo =  `<b>Mapa experimental de Unidades e Equipes da Atenção Primária</b>
+        <div class="scrollbar">
+        <p> Este mapa foi desenvolvido pela Coordenação-Geral de Monitoramento, Avaliação e Inteligência Analítica da Secretaria de Atenção Primária à Saúde do Ministério da Saúde (CGMAIA/SAPS/MS), para possibilitar a visualização de diversas informações úteis para o planejamento e gestão da APS. Foram desenvolvidos 3 tipos de mapas, utilizando dados abertos disponibilizados pelo Governo Federal, e mais um mapa sobre populações rurais está em desenvolvimento.</p>
+        <b>Demografia</b>
+        <p>Utilizamos a camada de setores censitários disponibilizada pelo IBGE, que é a unidade territorial de coleta referência do Censo Demográfico 2022. A densidade demográfica foi calculada a partir dos resultados do Censo 2022 com o total de pessoas agregado por setores para todo o Brasil. Entre os setores censitários, foram destacados os referentes à Agrupamentos quilombolas, Agrupamentos indígenas e Agrovilas de Projeto de Assentamento.</p>         
+        <p><i>Equipe técnica:</i> Ana Júlia Tomasini, Ana Luiza Morati Receputi,
+        Galileu Santos de Jesus, 
+        Lilian Silva Gonçalves, 
+        Rafael Willadino Braga, 
+        Vinicius de Araujo Oliveira.</p>
+        <p>Agradecemos à equipe da CGIAD/SAPS e ao C3SL/UFPR pelo apoio em tecnologia da informação.<p>
+        <p>O código fonte estará disponível em licença GPL, assim como informações detalhadas sobre as fontes de dados e  metodologia: <a href="https://github.com/ms-cgmaia/mapas" target='_blank'>https://github.com/ms-cgmaia/mapas</a><br />
+       Outras contribuições podem ser feitas por meio desse <a href="https://forms.office.com/r/BVyTE7pvMM" target='_blank'>formulário.</a></p>
+       </div>`
+
+    const texto_equipe =  `<b>Mapa experimental de Unidades e Equipes da Atenção Primária</b>
+        <div class="scrollbar">
+        <p> Este mapa foi desenvolvido pela Coordenação-Geral de Monitoramento, Avaliação e Inteligência Analítica da Secretaria de Atenção Primária à Saúde do Ministério da Saúde (CGMAIA/SAPS/MS), para possibilitar a visualização de diversas informações úteis para o planejamento e gestão da APS. Foram desenvolvidos 3 tipos de mapas, utilizando dados abertos disponibilizados pelo Governo Federal, e mais um mapa sobre populações rurais está em desenvolvimento.</p>
+        <p>Utilizamos a camada de setores censitários disponibilizada pelo IBGE, que é a unidade territorial de coleta referência do Censo Demográfico 2022. A densidade demográfica foi calculada a partir dos resultados do Censo 2022 com o total de pessoas agregado por setores para todo o Brasil. Entre os setores censitários, foram destacados os referentes à Agrupamentos quilombolas, Agrupamentos indígenas e Agrovilas de Projeto de Assentamento.</p>         
+        <b>Equipes</b>
+        <p>A camada de equipes contém informações sobre as equipes de saúde da APS, agrupadas por Unidades Básicas de Saúde. Foram utilizados dados preliminares, referentes a outubro de 2024, passíveis de revisão, constantes no Sistema de Informações em Saúde para Atenção Básica (Sisab). Para cada equipe foram calculados 4 parâmetros, e somados para calcular o total da UBS. 
+        <p>
+        • <i>Parâmetro Cadastral</i>, corresponde ao conceito de cobertura, ou seja, a capacidade estimada de atendimento de cada equipe conforme os parâmetros da Portaria 3.493/2024.<br />
+        • <i>Cadastros Previne</i>, correspondem ao total de indivíduos atribuídos as equipes de saúde pelas regras vigentes até abril de 2024, independente da realização ou qualidade de cadastro.<br />
+        • <i>Cadastros Vinculados</i>, corresponde ao total de pessoas cadastradas pela equipe com atualização nos últimos 24 meses.<br />
+        • <i>Pessoas Acompanhadas</i>, corresponde ao total de pessoas cadastradas e efetivamente acompanhadas com no mínimo 2 atendimentos ou atividades nos últimos 24 meses.<br />
+        </p>
+        <p> A geolocalização das unidades de saúde utilizada foi a disponível no Sistema de Cadastro Nacional de Estabelecimentos de Saúde (SCNES). Foram identificados casos em que as coordenadas geográficas dos estabelecimentos estavam fora do limite territorial do município. Estes foram realocados para o centro do município. </p>
+        <p>No cálculo do Parâmetro Cadastral estão sendo considerados os parâmetros de pessoas vinculadas definidos na Portaria GM/MS n° 3.493, de 10 de abril de 2024.</p>          
+        <p>Para Cadastros Vinculados e Cadastros Acompanhados estão sendo consideradas as novas regras do componente de vínculo e acompanhamento territorial.</p>
+
+        <p><i>Equipe técnica:</i> Ana Júlia Tomasini, Ana Luiza Morati Receputi,
+        Galileu Santos de Jesus, 
+        Lilian Silva Gonçalves, 
+        Rafael Willadino Braga, 
+        Vinicius de Araujo Oliveira.</p>
+        <p>Agradecemos à equipe da CGIAD/SAPS e ao C3SL/UFPR pelo apoio em tecnologia da informação.<p>
+        <p>O código fonte estará disponível em licença GPL, assim como informações detalhadas sobre as fontes de dados e  metodologia: <a href="https://github.com/ms-cgmaia/mapas" target='_blank'>https://github.com/ms-cgmaia/mapas</a><br />
+       Outras contribuições podem ser feitas por meio desse <a href="https://forms.office.com/r/BVyTE7pvMM" target='_blank'>formulário.</a></p>
+       </div>`
+
+    const texto_cobertura =  `<b>Mapa experimental de Unidades e Equipes da Atenção Primária</b>
+        <div class="scrollbar">
+        <p>Este mapa foi desenvolvido pela Coordenação-Geral de Monitoramento, Avaliação e Inteligência Analítica da Secretaria de Atenção Primária à Saúde do Ministério da Saúde (CGMAIA/SAPS/MS), para possibilitar a visualização de diversas informações úteis para o planejamento e gestão da APS. Foram desenvolvidos 3 tipos de mapas, utilizando dados abertos disponibilizados pelo Governo Federal, e mais um mapa sobre populações rurais está em desenvolvimento.</p>
+        <b>Cobertura</b>
+        <p> O mapa de cobertura é uma simulação, na qual as pessoas correspondentes ao parâmetro cadastral foram atribuídas a setores censitários até a saturação da população apurada, em rodadas incluindo sucessivamente os setores num raio de 2 elevado a X quilômetros, onde X variou de 0 a 5, simulando um efeito gravitacional. Em outras palavras, considerou-se que as pessoas até 1km são as melhores cobertas, em seguida até 2, 4, 8, 16 e 32 km, sucessivamente até esgotar o parâmetro cadastral do conjunto de equipes em uma dada UBS. Ressalta-se que se trata de uma estimativa que pode não ser apropriada para todas as situações, principalmente os extremos de populações superdensas ou de populações ribeirinhas, povos das florestas e outras situações de baixa densidade demográfica e menor mobilidade.
+        <p><i>Equipe técnica:</i> Ana Júlia Tomasini, Ana Luiza Morati Receputi,
+        Galileu Santos de Jesus, 
+        Lilian Silva Gonçalves, 
+        Rafael Willadino Braga, 
+        Vinicius de Araujo Oliveira.</p>
+        <p>Agradecemos à equipe da CGIAD/SAPS e ao C3SL/UFPR pelo apoio em tecnologia da informação.<p>
+        <p>O código fonte estará disponível em licença GPL, assim como informações detalhadas sobre as fontes de dados e  metodologia: <a href="https://github.com/ms-cgmaia/mapas" target='_blank'>https://github.com/ms-cgmaia/mapas</a><br />
+        Outras contribuições podem ser feitas por meio desse <a href="https://forms.office.com/r/BVyTE7pvMM" target='_blank'>formulário.</a></p>
+        </div>`
+    
+        const infoTexts = {
+            ruralidade: texto_demo,
+            equipe: texto_equipe,
+            cobertura: texto_cobertura
+    };
+
+    // Atualiza o conteúdo da janela de informações com base na seleção
+    function updateInfoText() {
+        const mapType = document.querySelector('input[name="map-type"]:checked').value;
+        const infoTextElement = document.getElementById('info-text');
+        /*infoTextElement.textContent = infoTexts[mapType];*/
+        infoTextElement.innerHTML = infoTexts[mapType];
+    }
+
+    // Função para alternar a exibição da janela modal e mudar o ícone
+    function toggleInfoModal() {
+        const modal = document.getElementById('info-modal');
+        const icon = document.getElementById('info-icon');
+
+        modal.classList.toggle('active');
+        
+        // Alterna a animação de rotação no ícone
+        if (modal.classList.contains('active')) {
+            icon.textContent = 'X'; // Muda para 'x' quando a janela está aberta
+            icon.classList.remove('rotating-to-i'); // Remove a animação de volta para "i"
+            icon.classList.add('rotating-to-x'); // Inicia a animação de rotação para "X"
+        } else {
+            icon.textContent = 'i'; // Muda de volta para 'i' quando a janela está fechada
+            icon.classList.remove('rotating-to-x'); // Remove a animação de rotação para "X"
+            icon.classList.add('rotating-to-i'); // Inicia a animação de rotação para "i"
+        } 
+    }
+
+    // funções de behaviours do mapa
+    const stateSelectorUFMenu = document.getElementById("state-selector-menu");
+    const stateSelectorUFBody = document.getElementById("state-selector");
+    const macrorregioesMenu = document.getElementById("macroregion-selector-menu");
+    const macrorregioesBody = document.getElementById("macroregion-selector");
+
+    const macrorregioes = {
+        'AC': [[1201], ['Macro Única - AC']],
+        'AL': [[2703, 2704],['2ª Macrorregião de Saúde', '1ª Macrorregião de Saúde']],
+        'AM': [[1302, 1303, 1304], ['Oeste', 'Leste', 'Central']],
+        'AP': [[1601], ['Macro Única - AP']],
+        'BA': [[2910, 2911, 2912, 2913, 2914, 2915, 2916, 2917, 2918],['Sul (NBS - Ilhéus)','Sudoeste (NBS - Vitória da Conquista)','Oeste (NBS - Barreiras)','Norte (NRS - Juazeiro)','Nordeste (NRS - Alagoinhas)','Leste (NRS - Salvador)','Extremo Sul (NRS - Teixeira de Freitas)','Centro-Leste (NRS - Feira de Santana)','Centro-Norte (NRS - Jacobina)']],
+        'CE': [[2306, 2307, 2308, 2309, 2310],['Litoral Leste/Jaguaribe','Sertão Central','Cariri','Sobral','Fortaleza']],
+        'DF': [[5302], ['Distrito Federal']],
+        'ES': [[3205, 3207, 3209], ['Sul', 'Metropolitana', 'Central Norte']],
+        'GO': [[5206, 5207, 5208, 5209, 5210],['Macrorregião Sudoeste','Macrorregião Nordeste','Macrorregião Centro-Oeste','Macrorregião Centro-Norte','Macrorregião Centro Sudeste']],
+        'MA': [[2109, 2110, 2111],['Macrorregião Sul', 'Macrorregião Norte', 'Macrorregião Leste']],
+        'MG': [[3101,3102,3103,3104,3105,3106,3107,3108,3109,3110,3111,3112,3113,3114,3115,3116],['Sul','Centro Sul','Centro','Jequitinhonha','Oeste','Leste','Sudeste','Norte','Noroeste','Leste do Sul','Nordeste','Triângulo do Sul','Triângulo do Norte','Vale do Aço','Extremo Sul','Sudoeste']],
+        'MS': [[5005, 5006, 5007, 5008],['Três Lagoas', 'Dourados', 'Corumbá', 'Campo Grande']],
+        'MT': [[5101, 5102, 5103, 5104, 5105, 5106],['Macrorregião Sul ','Macrorregião Oeste','Macrorregião Norte ','Macrorregião Leste','Macrorregião Centro-Norte','Macrorregião Centro-Noroeste']],
+        'PA': [[1509, 1510, 1511, 1512],['Macrorregional IV','Macrorregional III ','Macrorregional II','Macrorregional I']],
+        'PB': [[2501, 2502, 2503],['Macrorregião III - Sertão/Alto Sertão','Macrorregião II - Campina Grande','Macrorregião I - João Pessoa']],
+        'PE': [[2605, 2606, 2607, 2608],['Vale do S.Francisco e Araripe', 'Sertão', 'Metropolitana', 'Agreste']],
+        'PI': [[2207, 2208, 2209, 2210],['Semi-árido', 'Meio Norte', 'Litoral', 'Cerrados']],
+        'PR': [[4105, 4106, 4107, 4108],['Macrorregional Norte','Macrorregional Noroeste','Macrorregional Leste','Macrorregião Oeste']],
+        'RJ': [[3312], ['Macrorregião I']],
+        'RN': [[2401, 2402], ['Macrorregião II', 'Macrorregião I']],
+        'RO': [[1101, 1102],['Macrorregional II (Cacoal)', 'Macrorregião I - Porto Velho']],
+        'RR': [[1401], ['Macro-Roraima']],
+        'RS': [[4308, 4309, 4310, 4311, 4312, 4313, 4314],['VALES','Sul','Serra','Norte','Missioneira','Metropolitana','Centro-Oeste']],
+        'SC': [[4210, 4211, 4213, 4214, 4215, 4216, 4217, 4218], ['Sul','Planalto Norte e Nordeste','Grande Oeste','Grande Florianópolis','Foz do Rio Itajaí','Vale do Itajaí','Meio Oeste','Serra Catarinense']],
+        'SE': [[2801], ['Macro Única']],
+        'SP': [[3518,3519,3520,3521,3522,3523,3524,3525,3526,3527,3528,3529,3530,3531,3532,3533,3534,3535],['RRAS9','RRAS8','RRAS7','RRAS6','RRAS5','RRAS4','RRAS3','RRAS2','RRAS17','RRAS16','RRAS15','RRAS14','RRAS13','RRAS12','RRAS11','RRAS10','RRAS1','RRAS 18']],
+        'TO': [[1701, 1702],['Macrorregião de Saúde Norte', 'Macrorregião Centro-Sul']]
+    }
+
+    // Carregar o mapa com base na seleção
+    function loadMap() {
+        const state = document.getElementById('state-selector').value;
+        const macroregion = document.getElementById('macroregion-selector').value;
+        const mapType = document.querySelector('input[name="map-type"]:checked').value;
+        const iframe = document.getElementById('iframe');
+        const loadingMessage = document.getElementById('loading-message');
+
+        // Exibindo a mensagem de loading enquanto o mapa está carregando
+        loadingMessage.style.display = 'block';
+
+        // Atualiza a URL do iframe com base na seleção
+        if (macroregion) {
+            iframe.src = `./mapas/${mapType}/${state}_${macroregion}.html`;
+        } else {
+            if (!(state === "SP" || state === "MG")) {
+                iframe.src = `./mapas/${mapType}/${state}.html`;
+            } else {
+                const firstMacroregion = document.getElementById('macroregion-selector').options[1]?.value;
+                iframe.src = firstMacroregion
+                    ? `./mapas/${mapType}/${state}_${firstMacroregion}.html`
+                    : `./mapas/${mapType}/${state}.html`;
+            }
+        }
+
+        // Quando o conteúdo do iframe for carregado, esconda a mensagem de loading
+        iframe.onload = function () {
+            loadingMessage.style.display = 'none';
+        };
+    }
+    
+    function updateMacrorregioes(state) {
+        // Limpa os menus existentes
+        macrorregioesMenu.innerHTML = "";
+        macrorregioesBody.innerHTML = "";
+
+        // Cria a opção padrão
+        const optionPadraoMenu = document.createElement("option");
+        optionPadraoMenu.value = "";
+        optionPadraoMenu.textContent = "Selecione uma Macrorregião";
+        optionPadraoMenu.disabled = true;
+        optionPadraoMenu.selected = true;
+
+        const optionPadraoBody = document.createElement("option");
+        optionPadraoBody.value = "";
+        optionPadraoBody.textContent = "Selecione uma Macrorregião";
+        optionPadraoBody.disabled = true;
+        optionPadraoBody.selected = true;
+
+        // Adiciona a opção padrão aos menus
+        macrorregioesMenu.appendChild(optionPadraoMenu);
+        macrorregioesBody.appendChild(optionPadraoBody);
+
+        // Verifica se o estado possui macrorregiões definidas
+        if (macrorregioes[state]) {
+            const [codigos, nomes] = macrorregioes[state];
+            for (let i = 0; i < codigos.length; i++) {
+                // Cria um novo elemento <option> para cada menu
+                const optionMenu = document.createElement("option");
+                const optionBody = document.createElement("option");
+
+                // Define o valor e o texto do <option>
+                optionMenu.value = codigos[i];
+                optionMenu.textContent = nomes[i];
+                optionBody.value = codigos[i];
+                optionBody.textContent = nomes[i];
+
+                // Adiciona os <option> aos menus
+                macrorregioesMenu.appendChild(optionMenu);
+                macrorregioesBody.appendChild(optionBody);
+            }
+        }
+    }
+
+    stateSelectorUFMenu.addEventListener("change", () => {
+        const selectedState = stateSelectorUFMenu.value;
+        stateSelectorUFBody.value = selectedState;   
+        updateMacrorregioes (selectedState)
+        // carrega o mapa
+        loadMap(); 
+    });
+    stateSelectorUFBody.addEventListener("change", () => {
+        const selectedState = stateSelectorUFBody.value
+        stateSelectorUFMenu.value = selectedState;
+        updateMacrorregioes (selectedState)
+        // carrega o mapa
+        loadMap(); 
+    });
+    macrorregioesMenu.addEventListener("change", () => {
+        const selectedState = macrorregioesMenu.value;
+        macrorregioesBody.value = selectedState;   
+        // carrega o mapa
+        loadMap(); 
+        closeNav();
+    });
+    macrorregioesBody.addEventListener("change", () => {
+        const selectedState = macrorregioesBody.value
+        macrorregioesMenu.value = selectedState;
+        // carrega o mapa
+        loadMap();
+        closeNav();
+    });
+
+    // Elementos radio group
+    const radioGroup = document.getElementById("radio-group");
+    const radioGroupMenu = document.getElementById("radio-group-menu");
+
+    // Sincronizar a seleção entre os grupos
+    function syncRadioGroups(selectedValue) {
+        const radiosGroup = radioGroup.querySelectorAll("input[name='map-type']");
+        const radiosGroupMenu = radioGroupMenu.querySelectorAll("input[name='map-type-menu']");
+
+        radiosGroup.forEach(radio => {
+            radio.checked = radio.value === selectedValue;
+        });
+
+        radiosGroupMenu.forEach(radio => {
+            radio.checked = radio.value === selectedValue;
+        });
+    }
+
+    // Adicionar eventos de alteração para os rádios do primeiro grupo
+    radioGroup.querySelectorAll("input[name='map-type']").forEach(radio => {
+        radio.addEventListener('change', () => {
+            syncRadioGroups(radio.value); // Sincronizar seleção
+            updateInfoText(); // Atualizar o texto
+            loadMap();        // Atualizar o mapa
+            closeNav();
+        });
+    });
+
+    // Adicionar eventos de alteração para os rádios do menu
+    radioGroupMenu.querySelectorAll("input[name='map-type-menu']").forEach(radio => {
+        radio.addEventListener('change', () => {
+            syncRadioGroups(radio.value); // Sincronizar seleção
+            updateInfoText(); // Atualizar o texto
+            loadMap();        // Atualizar o mapa
+            closeNav();
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Chama o carregamento do mapa
+        loadMap();
+        
+        // Chama a função para atualizar as macroregiões com base no estado inicial
+        const initialState = document.getElementById('state-selector').value;
+        if (initialState) {
+            updateMacrorregioes(initialState);
+        }
+    });
+         
+    // fecha o menu se alterar o tamanho da tela
+    window.onresize = closeNav;
+    // Chamada inicial para atualizar o texto ao carregar a página
+    document.addEventListener("DOMContentLoaded", updateInfoText);
+    </script> 
+</body>
+</html>

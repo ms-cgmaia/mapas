@@ -1,0 +1,626 @@
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    height: calc(100vh);
+}
+
+/* Cabeçalho */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    flex-grow: 1; /* Faz com que o título ocupe o espaço disponível no centro */
+    text-align: center; /* Centraliza o texto */
+    font-size: 1.5em;
+}
+
+/* Alinhamento do menu suspenso */
+header nav {
+    margin-right: 20px; /* Adiciona espaçamento à direita, se necessário */
+}
+
+header select {
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+/* Descrição abaixo do menu */
+#description {
+    margin-top: 10px;
+    font-size: 1.1em;
+    color: black;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* Área principal */
+main {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 500px;
+}
+
+footer img {
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribui espaço entre os elementos */
+    max-width: 1200px; /* Define um limite para o tamanho do rodapé */
+    margin: 0 auto; /* Centraliza horizontalmente */
+}
+
+.footer-logo {
+    max-width: 150px; /* Limita o tamanho da imagem */
+}
+
+.footer-logo2 {
+    max-width: 120px; /* Limita o tamanho da imagem */
+}
+
+.footer-text {
+    flex-grow: 1; /* Permite que o texto ocupe o espaço restante */
+    text-align: center; /* Centraliza o texto dentro do bloco */
+    font-size:0.8em;
+    line-height: 1.5em;
+}
+
+
+/* Logo */
+.logo {
+    width: 90px; 
+    height: auto;
+    margin-right: 10px;
+}
+
+
+/* Cabeçalho - Ajuste para logos e título */
+header {
+    background-color: #004B87;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.header-content .logo-left {
+    max-width: 150px;
+}
+.header-content .logo-right {
+    max-width: 225px;
+    max-height: 55px;
+    display: block;
+}
+h1 {
+    font-size: 24px;
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* Menu */
+#menu {
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin-top: 7px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+#menu label {
+    font-weight: bold;
+}
+#state-selector input[type="radio"], #state-selector-menu input[type="radio"]{
+    margin: 10px 0;
+}
+#radio-group {
+    display: flex;
+    justify-content: space-around;
+    /*margin-bottom: 15px;*/
+}
+
+/* Esconde o radio button original */
+#radio-group input[type="radio"] {
+    display: none;
+}
+
+/* Estiliza o label para se comportar como um botão */
+#radio-group label {
+    margin-left: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    background-color: #E9E9E9;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 16px;
+    text-align: center;
+}
+
+#radio-group label:hover {
+    background-color: #D6D6D6;
+}
+
+/* Estilo do label quando o botão é selecionado */
+#radio-group input[type="radio"]:checked + label {
+    background-color: #004B87;
+    color: white;
+}
+
+/* Estilos do menu lateral*/
+#radio-group-menu {
+    display: block;
+    width: 250px !important;
+    padding: 0px 20px ;
+}
+#radio-group-menu label {
+    padding: 8px 8px 8px 30px;
+    font-size: 25px;
+    color: #badaff;
+    display: block;
+    transition: 0.3s;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #012f55;
+    text-align: left;
+    font-size: 1.1em;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}  
+#radio-group-menu label:hover {
+    color: #012f55;
+    background-color: #badaff;
+}
+
+/* Esconde o radio button original */
+#radio-group-menu input[type="radio"] {
+    display: none;
+}
+/* Estilo do label quando o botão é selecionado */
+#radio-group-menu input[type="radio"]:checked + label {
+    background-color: #004B87;
+    color: white;
+}
+
+/* Estilos do seletor */
+select {
+    width: 220px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+/* Estilos do iframe (mapa) */
+iframe {
+    width: 99%;
+    border: none;
+    display: block;
+    margin-top: 10px;
+    height: calc(100vh - 260px) !important;
+}
+
+/* Rodapé */
+footer {
+    background-color: #004B87;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    /*margin-top: 20px;*/
+}
+
+/* Estilo para a mensagem de loading (a fazer...)*/
+#loading-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5em;
+    color: #007BFF;
+    display: block; /* Ajuste para "block" para garantir que a mensagem seja exibida */
+    z-index: 10;
+    background: rgba(255, 255, 255, 1);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+#loading-message img {
+    width: 32px;
+    height: 32px;
+    margin-left: 60px;
+}
+
+/* Contêiner para radio buttons e dropdown */
+.selection-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaço entre os itens */
+    margin-top: 15px;
+    justify-content: center; /* Centraliza o grupo horizontalmente */
+}
+.selection-container {
+    display: flex;
+    flex-direction: row; /* Horizontal layout by default */
+    align-items: center;
+    justify-content:center; /* Space between radio group and dropdown */
+}
+
+/* Ajuste para o dropdown */
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ajuste para o label do dropdown */
+.dropdown-container label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* ícone */
+#info-text, #info-text li {
+    text-align:justify;
+    font-size: 0.8em;
+    padding-bottom: 15px;
+}
+
+
+#info-icon {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    /*font-size: 30px;
+        display: inline-block;
+    */
+    pointer-events: auto;
+    transition: transform 0.2s ease, opacity 0.2s ease; /* Suaviza a rotação e opacidade */
+}
+
+#info-icon:hover {
+    background-color: #0056b3;
+}
+
+/* modelagem da janela */
+#info-modal {
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: all 0.3s ease-in-out;
+    width: 600px; /* ver depois qual tamanho da janela */
+}
+#info-modal a {
+    color: #f1942f;
+    text-decoration: none;
+}
+
+
+#info-modal.active {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* conteúdo da janela */
+.info-content {
+    text-align: center;
+}
+
+.info-content h2 {
+    margin-bottom: 10px;
+}
+
+.info-content p {
+    line-height: 150%;
+    font-size: 1em;
+}
+
+.info-content button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.info-content button:hover {
+    background-color: #0056b3;
+}
+
+/* Animação de rotação */
+@keyframes rotateToX {
+    0% {
+        transform: rotate(0deg); /* Começa sem rotação */
+    }
+    50% {
+        transform: rotate(90deg); /* Gira 90 graus */
+    }
+    100% {
+        transform: rotate(180deg); /* Gira até 180 graus */
+    }
+}
+
+@keyframes rotateToI {
+    0% {
+        transform: rotate(180deg); /* Começa a partir do "X" */
+    }
+    50% {
+        transform: rotate(90deg); /* Gira 90 graus */
+    }
+    100% {
+        transform: rotate(0deg); /* Retorna para 0 graus */
+    }
+}
+
+/* Aplica a animação quando o modal está ativo */
+#info-icon.rotating-to-x {
+    animation: rotateToX 0.3s forwards; /* Animação de 180 graus */
+}
+
+/* Aplica a animação de volta para "i" */
+#info-icon.rotating-to-i {
+    animation: rotateToI 0.3s forwards; /* Retorna a rotação de 180 graus para 0 */
+}
+
+/* Estilos da landing page */
+.container {
+    display: flex;
+}
+
+#state-info{
+    font-family: 'Roboto', sans-serif; font-weight: 800; 
+    color:#F90; 
+    font-size: 1.45em; 
+    margin-bottom: 15px; 
+    display: block; 
+    border-bottom: 2px solid #DDD;
+}
+
+.left-panel {
+    flex: 2;
+    float: left;
+    padding-right: 10px;
+}
+
+.right-panel {
+    flex: 1;
+    float: right;
+}
+
+.scrollbar {
+    background: #FAFAFA;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    max-height: 450px;
+    padding: 10px;
+    border: 1px solid #CCC;
+}
+.scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #f1942f;
+}
+
+
+/* The side navigation menu */
+.menuLateral {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #012f55; /* mais escuro*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the menuLateral */
+    visibility:hidden;
+}
+
+/* The navigation menu links */
+.menuLateral a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #badaff;
+    display: block;
+    transition: 0.3s;
+
+}
+
+/* When you mouse over the navigation links, change their color */
+.menuLateral a:hover {
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.menuLateral .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 0px;
+    margin: 0px;
+}
+
+.openbtn {
+    visibility: hidden;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the menuLateral (less padding and a smaller font size) */
+@media screen and (max-width: 768px) { /* Adjust breakpoint as needed */
+    header {
+        flex-direction: column;
+    }
+    .footer-content {
+        flex-direction: column;
+    }
+    iframe {
+        width: 100%;
+        margin: 0px;
+        height: calc(100vh - 90px) !important;
+    }
+    main {
+        padding: 0px;
+        min-height: 600px;
+    }
+    footer {
+        padding:0px;
+        display: none;
+        visibility: hidden;
+    }
+    #menu {
+        padding:0px;
+        margin:0px;
+    }
+
+    #description {
+        display: none;
+    }
+    .selection-container {
+        display: none;
+    }
+    .logo-left {
+        width: 50px; 
+    }
+
+    .header-content h1{
+        font-size: 0.9em;
+    }
+    .menuLateral {
+        padding-top: 15px; 
+        visibility: visible;
+    }
+    .menuLateral a {font-size: 18px;}
+    /* Style the button that is used to open the sidepanel */
+    .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #004B87;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 10%;
+        visibility:visible;
+    }
+    .openbtn:hover {
+        background-color: #386d99;
+    }
+    .header-content .logo-right {
+        visibility: hidden;
+        display: none;
+    }
+    
+    .dropdown-container-menu{
+        margin-top: 20px;
+        padding-left: 20px;
+        width: 100%;
+    }
+    .dropdown-container-menu select{
+        width: 240px;
+    }
+    #info-modal {
+        width: 80%;
+        font-size: 0.9em;
+    }
+}
+
+
+/* botão do menu lateral */
+.menuLateral a:hover {
+    color: #f1f1f1;
+}
+
+/* estilo do scrool dos mapas */
+.scrollbar {
+    background-color: #FAFAFA;
+    overflow-y: auto;
+    margin: 15px 0px;
+    padding: 0px 10px;
+    max-height: 500px;
+    border: 1px solid #EEE;
+}
+.scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+.scrollbar::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #f1942f;
+}
+
+.shadow {
+    -webkit-filter: drop-shadow( 3px 3px 4px rgba(0, 0, 0, .5));
+    filter: drop-shadow( 3px 3px 4px rgba(0, 0, 0, .5));
+    /* Similar syntax to box-shadow */
+  }
