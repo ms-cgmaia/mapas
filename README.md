@@ -15,8 +15,8 @@ Foram criados três tipos de mapas, utilizando dados abertos disponibilizados pe
 Para gerar o mapa de demografia, utilizamos scripts usando um notebook (demografia_notebook.ipynb) ou o script demografia.py, sendo executado da pasta raiz com os seguintes comandos:
 
 ``` python
-# python3 scripts/demografia.py AC --export True/False -> gera de um estado específico
-# python3 scripts/demografia.py --export True/False -> gera de todo o Brasil
+# python3 scripts/demografia.py AC --export True/False # gera de um estado específico
+# python3 scripts/demografia.py --export True/False # gera de todo o Brasil
 ```
 
 ### Mapas de Equipes
@@ -24,8 +24,8 @@ Para gerar o mapa de demografia, utilizamos scripts usando um notebook (demograf
 Para gerar o mapa de demografia, utilizamos scripts usando um notebook (equipes_notebook.ipynb) ou o script demografia_aps.py, sendo executado da pasta raiz com os seguintes comandos:
 
 ``` python
-# python3 scripts/equipes.py AC --export True/False -> gera de um estado específico
-# python3 scripts/equipes.py --export True/False -> gera de todo o Brasil
+# python3 scripts/equipes.py AC --export True/False # gera de um estado específico
+# python3 scripts/equipes.py --export True/False # gera de todo o Brasil
 ```
 
 ### Mapas de cobertura APS
@@ -33,8 +33,8 @@ Para gerar o mapa de demografia, utilizamos scripts usando um notebook (equipes_
 Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (cobertura_aps_notebook.ipynb) ou o script cobertura_aps, sendo executado da pasta raiz com os seguintes comandos:
 
 ``` python
-# python3 scripts/cobertura_aps.py AC --export True/False -> gera de um estado específico
-# python3 scripts/cobertura_aps.py --export True/False -> gera de todo o Brasil
+# python3 scripts/cobertura_aps.py AC --export True/False # gera de um estado específico
+# python3 scripts/cobertura_aps.py --export True/False # gera de todo o Brasil
 ```
 
 ## Resultados Gerados
