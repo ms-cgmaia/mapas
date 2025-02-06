@@ -431,7 +431,7 @@ def gera_mapa_equipe(UF, MACRO=None, export=False):
 
 def get_setores(UF, MACRO):
     if os.path.exists('../shapes/setores_light_densidade.gpkg'):
-        setores_global = gpd.read_file('./shapes/setores_light_densidade.gpkg')
+        setores_global = gpd.read_file('../shapes/setores_light_densidade.gpkg')
     elif os.path.exists('./shapes/setores_light_densidade.gpkg'):
         setores_global = gpd.read_file('./shapes/setores_light_densidade.gpkg')
     setores_global =  setores_global.loc[setores_global.CO_MACRORREGIONAL==int(MACRO)]
