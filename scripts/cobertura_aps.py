@@ -11,7 +11,7 @@ setores = gpd.read_file('./shapes/setores_ligth_processado.gpkg')
 unidades = gpd.read_file('./shapes/unidades_processado.gpkg')
 
 Saídas:
-Mapas de um estado ou de todos no caminho: ./output/mapas/cobertura/
+Mapas de um estado ou de todos no caminho: ./output/site/mapas/cobertura/
 
 Executando:
 
@@ -198,7 +198,7 @@ def gera_mapa_cobertura(UF, export=False, ajustaCadastros=False):
     
     # Display/Export o mapa
     if export:
-        output_dir = './output/mapas/cobertura/'
+        output_dir = './output/site/mapas/cobertura/'
         os.makedirs(output_dir, exist_ok=True)
         map.save(f"{output_dir}{UF}.html")
         print("Mapa salvo em:", output_dir)
