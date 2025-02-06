@@ -49,3 +49,13 @@ Os resultados serão armazenados na pasta `output/site/mapas`, que conterá trê
 - `ruralidade`: Resultados sobre a ruralidade.
 
 A página inicial do site pode ser acessada no caminho `output/site/index.html`, onde será possível visualizar todos os resultados gerados.
+
+
+### **Pré-requisitos**
+
+Antes de executar o projeto, é imprescindível que todas as bases estejam corretas. De antemão, será necessário gerar a base extraída do IBGE. Para isso, execute o script `reconstruir_dados_setores.sh` com os seguintes comandos:
+
+```sh
+chmod +x scripts/reconstruir_dados_setores.sh
+./scripts/reconstruir_dados_setores.sh
+```
