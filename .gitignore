@@ -1,5 +1,8 @@
 **/data/
-/dados/
+dados/distancias/SP.parquet
+dados/distancias/BR.parquet
+output/site/dados.json
+output/site/estados.html
 /shapes/
 /output/site/mapas/
 /docs/
