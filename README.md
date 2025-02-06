@@ -53,9 +53,9 @@ A página inicial do site pode ser acessada no caminho `output/site/index.html`,
 
 ### **Pré-requisitos**
 
-Antes de executar o projeto, é imprescindível que todas as bases estejam corretas. De antemão, será necessário gerar a base extraída do IBGE. Para isso, execute o script `reconstruir_dados_setores.sh` com os seguintes comandos:
+Antes de executar o projeto, é imprescindível que todas as bases estejam corretas. De antemão, será necessário gerar a base extraída do IBGE e outros arquivos. Para isso, execute o script `reconstruir_dados.sh` com os seguintes comandos:
 
 ```sh
-chmod +x scripts/reconstruir_dados_setores.sh
-./scripts/reconstruir_dados_setores.sh
+chmod +x scripts/reconstruir_dados.sh
+./scripts/reconstruir_dados.sh
 ```
