@@ -38,7 +38,7 @@ Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (cober
 ```
 #### Script para gerar distâncias
 
-O script `scripts/gera_distancias.py` é responsável por gerar os arquivos em `dados/distancias`, utilizando a base de setores do IBGE. Ele retorna um DataFrame com as distâncias entre cada unidade de saúde e os setores censitários de um município, considerando um limite máximo de distância.
+O script `scripts/gera_distancias.py` é responsável por gerar os arquivos em `dados/distancias`, utilizando a base de setores do [IBGE](https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/26565-malhas-de-setores-censitarios-divisoes-intramunicipais.html). Ele retorna um DataFrame com as distâncias entre cada unidade de saúde e os setores censitários de um município, considerando um limite máximo de distância.
 
 ## Resultados Gerados
 
