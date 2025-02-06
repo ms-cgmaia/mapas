@@ -36,6 +36,9 @@ Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (cober
 # python3 scripts/cobertura_aps.py AC --export True/False # gera de um estado específico
 # python3 scripts/cobertura_aps.py --export True/False # gera de todo o Brasil
 ```
+#### Script para gerar distâncias
+
+O script `scripts/gera_distancias.py` é responsável por gerar os arquivos em `dados/distancias`, utilizando a base de setores do IBGE. Ele retorna um DataFrame com as distâncias entre cada unidade de saúde e os setores censitários de um município, considerando um limite máximo de distância.
 
 ## Resultados Gerados
 
