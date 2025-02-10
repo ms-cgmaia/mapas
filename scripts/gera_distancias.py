@@ -9,7 +9,6 @@ import importlib
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '.')))
 import utils
 importlib.reload(utils)
-
 from utils import sg_uf_ibge, co_uf_ibge
 
 # base de setores do IBGE

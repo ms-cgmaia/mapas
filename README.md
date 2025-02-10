@@ -12,30 +12,16 @@ Foram criados três tipos de mapas, utilizando dados abertos disponibilizados pe
 
 ### Mapas de Demografia
 
-Para gerar o mapa de demografia, utilizamos scripts usando um notebook (demografia_notebook.ipynb) ou o script demografia.py, sendo executado da pasta raiz com os seguintes comandos:
-
-``` python
-# python3 scripts/demografia.py AC --export True/False # gera de um estado específico
-# python3 scripts/demografia.py --export True/False # gera de todo o Brasil
-```
+Para gerar o mapa de demografia, utilizamos scripts usando um notebook (scripts/demografia_notebook.ipynb).
 
 ### Mapas de Equipes
 
-Para gerar o mapa de demografia, utilizamos scripts usando um notebook (equipes_notebook.ipynb) ou o script demografia_aps.py, sendo executado da pasta raiz com os seguintes comandos:
-
-``` python
-# python3 scripts/equipes.py AC --export True/False # gera de um estado específico
-# python3 scripts/equipes.py --export True/False # gera de todo o Brasil
-```
+Para gerar o mapa de demografia, utilizamos scripts usando um notebook (scripts/equipes_notebook.ipynb).
 
 ### Mapas de cobertura APS
 
-Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (cobertura_aps_notebook.ipynb) ou o script cobertura_aps, sendo executado da pasta raiz com os seguintes comandos:
+Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (scripts/cobertura_aps_notebook.ipynb).
 
-``` python
-# python3 scripts/cobertura_aps.py AC --export True/False # gera de um estado específico
-# python3 scripts/cobertura_aps.py --export True/False # gera de todo o Brasil
-```
 #### Script para gerar distâncias
 
 O script `scripts/gera_distancias.py` é responsável por gerar os arquivos em `dados/distancias`, utilizando a base de [setores do IBGE](https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/26565-malhas-de-setores-censitarios-divisoes-intramunicipais.html). Ele retorna um DataFrame com as distâncias entre cada unidade de saúde e os setores censitários de um município, considerando um limite máximo de distância.
