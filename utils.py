@@ -1,3 +1,22 @@
+"""
+utils.py
+
+Este módulo fornece funções utilitárias para processar e analisar dados geográficos e relacionados à saúde.
+Ele inclui funções para formatar identificadores, recuperar unidades de saúde, gerar mapas e executar
+transformações de dados. As funções são projetadas para serem reutilizáveis e facilitar tarefas comuns na análise de dados.
+
+Funções:
+- format_ine(numero): Formata um número fornecido para uma sequência de 10 dígitos.
+- format_cnes(numero): Formata um número fornecido para uma sequência de 7 dígitos.
+- get_unidades(UF='DF', MACRO=None, ativas=True): Recupera unidades de saúde com base em critérios especificados.
+- gera_mapa_densidade(UF, MACRO, export=False): Gera um mapa de densidade de unidades de saúde para uma área fornecida.
+- get_setores(UF, MACRO): Recupera setores censitários para um estado e macrorregião especificados.
+- convert_keys_to_int(d): Converte todas as chaves em um dicionário de sequência de caracteres para inteiro format.
+- get_distancias(UF): Carrega dados de distância para um estado especificado.
+- format_population(x): Formata um número populacional com separadores de milhares.
+- format_percentage(x): Formata um valor decimal como uma string de porcentagem.
+"""
+
 import os
 os.environ['USE_PYGEOS'] = '0'
 import geopandas as gpd
@@ -59,123 +78,123 @@ co_uf_ibge = {'AC':'12','AL':'27','AP':'16','AM':'13','BA':'29','CE':'23','DF':'
 sg_uf_ibge = {'12':'AC','27':'AL','16':'AP','13':'AM','29':'BA','23':'CE','53':'DF','32':'ES','52':'GO','21':'MA','51':'MT','50':'MS','31':'MG','15':'PA','25':'PB','41':'PR','26':'PE','22':'PI','33':'RJ','24':'RN','43':'RS','11':'RO','14':'RR','42':'SC','35':'SP','28':'SE','17':'TO'}
 
 nome_macro = {
-    '1101': 'Macrorregional II (Cacoal)',
-    '1102': 'Macrorregião I - Porto Velho',
-    '1201': 'Macro Única - AC',
-    '1302': 'Oeste',
-    '1304': 'Central',
-    '1303': 'Leste',
-    '1401': 'Macro-Roraima',
-    '1512': 'Macrorregional I',
-    '1509': 'Macrorregional IV',
-    '1511': 'Macrorregional II',
-    '1510': 'Macrorregional III ',
-    '1601': 'Macro Única - AP',
-    '1702': 'Macrorregião Centro-Sul',
-    '1701': 'Macrorregião Norte',
-    '2109': 'Macrorregião Sul',
-    '2111': 'Macrorregião Leste',
-    '2110': 'Macrorregião Norte',
-    '2207': 'Semi-Árido',
-    '2208': 'Meio Norte',
-    '2210': 'Cerrados',
-    '2209': 'Litoral',
-    '2308': '3ª Macro - Cariri',
-    '2310': '1ª Macro - Fortaleza',
-    '2309': '2ª Macro - Sobral',
-    '2307': '4ª Macro - Sertão Central',
-    '2306': '5ª Macro - Litoral Leste/Jaguaribe',
-    '2402': 'Macrorregião I',
-    '2401': 'Macrorregião II',
-    '2501': 'Macrorregião III - Sertão/Alto Sertão',
-    '2502': 'Macrorregião II - Campina Grande',
-    '2503': 'Macrorregião I - João Pessoa',
-    '2607': 'Metropolitana',
-    '2606': 'Sertão',
-    '2605': 'Vale do São Francisco e Araripe',
-    '2608': 'Agreste',
-    '2703': '2ª Macrorregião de Saúde',
-    '2704': '1ª Macrorregião de Saúde',
-    '2801': 'Macro Única',
-    '2917': 'Centro-Leste (NRS - Feira Santana)',
-    '2913': 'Norte - (NRS - Juazeiro)',
-    '2914': 'Nordeste (NRS - Alagoinhas)',
-    '2911': 'Sudoeste (NBS - Vitória Conquista)',
-    '2910': 'Sul (NBS - Ilhéus)',
-    '2916': 'Extremo Sul (NRS - Teixeira Freitas)',
-    '2915': 'Leste - (NRS - Salvador)',
-    '2918': 'Centro - Norte (NRS - Jacobina)',
-    '2912': 'Oeste (NBS - Barreiras)',
-    '3113': 'Triangulo do Norte',
-    '3103': 'Centro',
-    '3110': 'Leste do Sul',
-    '3114': 'Vale do Aço',
-    '3106': 'Leste',
-    '3112': 'Triangulo do Sul',
-    '3105': 'Oeste',
-    '3111': 'Nordeste',
-    '3101': 'Sul',
-    '3107': 'Sudeste',
-    '3102': 'Centro Sul',
-    '3104': 'Jequitinhonha',
-    '3109': 'Noroeste',
-    '3108': 'Norte',
-    '3207': 'Metropolitana',
-    '3209': 'Central/Norte',
-    '3205': 'Sul',
-    '3312': 'Macrorregião I',
-    '3310': 'Macrorregião III',
-    '3311': 'Macrorregião II',
-    '3533': 'RRAS10',
-    '3531': 'RRAS12',
-    '3528': 'RRAS15',
-    '3518': 'RRAS9',
-    '3529': 'RRAS14',
-    '3519': 'RRAS8',
-    '3532': 'RRAS11',
-    '3530': 'RRAS13',
-    '3526': 'RRAS17',
-    '3525': 'RRAS2',
-    '3527': 'RRAS16',
-    '3520': 'RRAS7',
-    '3522': 'RRAS5',
-    '3524': 'RRAS3',
-    '3523': 'RRAS4',
-    '3534': 'RRAS1',
-    '3521': 'RRAS6',
-    '4105': 'Macrorregional Norte',
-    '4107': 'Macrorregional Leste',
-    '4106': 'Macrorregional Noroeste',
-    '4108': 'Macrorregião Oeste',
-    '4212': 'Meio Oeste e Serra Catarinense',
-    '4213': 'Grande Oeste',
-    '4216': 'Alto Vale do Itajaí',
-    '4214': 'Grande Florianopolis',
-    '4211': 'Planalto Norte e Nordeste',
-    '4210': 'Sul',
-    '4215': 'Foz do Rio Itajaí',
-    '4309': 'Sul',
-    '4311': 'Norte',
-    '4314': 'Centro-Oeste',
-    '4312': 'Missioneira',
-    '4310': 'Serra',
-    '4313': 'Metropolitana',
-    '4308': 'Vales',
-    '5005': 'Três Lagoas',
-    '5008': 'Campo Grande',
-    '5006': 'Dourados',
-    '5007': 'Corumba',
-    '5105': 'Macrorregião Centro-Norte',
-    '5104': 'Macrorregião Leste',
-    '5103': 'Macrorregião Norte ',
-    '5101': 'Macrorregião Sul ',
-    '5102': 'Macrorregião Oeste',
-    '5208': 'Macrorregião Centro-Oeste',
-    '5209': 'Macrorregião Centro-Norte',
-    '5206': 'Macrorregião Sudoeste',
-    '5207': 'Macrorregião Nordeste',
-    '5210': 'Macrorregião Centro Sudeste',
-    '5302': 'Distrito Federal'
+	'1101': 'Macrorregional II (Cacoal)',
+	'1102': 'Macrorregião I (Porto Velho)',
+	'1201': 'Macro Única - AC (Rio Branco)',
+	'1302': 'Oeste (Tabatinga)',
+	'1303': 'Leste (Parintins)',
+	'1304': 'Central (Manaus)',
+	'1401': 'Macro-Roraima (Boa Vista)',
+	'1509': 'Macrorregional IV (Marabá)',
+	'1510': 'Macrorregional III  (Santarém)',
+	'1511': 'Macrorregional II (Paragominas)',
+	'1512': 'Macrorregional I (Belém)',
+	'1601': 'Macro Única - AP (Macapá)',
+	'1701': 'Macrorregião Norte (Araguaína)',
+	'1702': 'Macrorregião Centro-Sul (Palmas)',
+	'2109': 'Macrorregião Sul (Imperatriz)',
+	'2110': 'Macrorregião Norte (São Luís)',
+	'2111': 'Macrorregião Leste (Caxias)',
+	'2207': 'Semi-Árido (Picos)',
+	'2208': 'Meio Norte (Teresina)',
+	'2209': 'Litoral (Parnaíba)',
+	'2210': 'Cerrados (Floriano)',
+	'2306': '5ª Macro - Litoral Leste/Jaguaribe (Aracati)',
+	'2307': '4ª Macro - Sertão Central (Quixadá)',
+	'2308': '3ª Macro - Cariri (Juazeiro do Norte)',
+	'2309': '2ª Macro - Sobral (Sobral)',
+	'2310': '1ª Macro - Fortaleza (Fortaleza)',
+	'2401': 'Macrorregião II (Mossoró)',
+	'2402': 'Macrorregião I (Natal)',
+	'2501': 'Macrorregião III - Sertão/Alto Sertão (Cajazeiras)',
+	'2502': 'Macrorregião II - Campina Grande (Campina Grande)',
+	'2503': 'Macrorregião I - João Pessoa (João Pessoa)',
+	'2605': 'Vale do São Francisco e Araripe (Petrolina)',
+	'2606': 'Sertão (Serra Talhada)',
+	'2607': 'Metropolitana (Recife)',
+	'2608': 'Agreste (Caruaru)',
+	'2703': '2ª Macrorregião de Saúde (Arapiraca)',
+	'2704': '1ª Macrorregião de Saúde (Maceió)',
+	'2801': 'Macro Única (Aracaju)',
+	'2910': 'Sul (Ilhéus)',
+	'2911': 'Sudoeste (Vitória da Conquista)',
+	'2912': 'Oeste (Barreiras)',
+	'2913': 'Norte (Juazeiro)',
+	'2914': 'Nordeste (Alagoinhas)',
+	'2915': 'Leste (Salvador)',
+	'2916': 'Extremo Sul (Teixeira de Freitas)',
+	'2917': 'Centro-Leste (Feira de Santana)',
+	'2918': 'Centro - Norte (Jacobina)',
+	'3101': 'Sul (Poços de Caldas)',
+	'3102': 'Centro Sul (São João Del Rei)',
+	'3103': 'Centro (Belo Horizonte)',
+	'3104': 'Jequitinhonha (Diamantina)',
+	'3105': 'Oeste (Divinópolis)',
+	'3106': 'Leste (Governador Valadares)',
+	'3107': 'Sudeste (Juiz de Fora)',
+	'3108': 'Norte (Montes Claros)',
+	'3109': 'Noroeste (Patos de Minas)',
+	'3110': 'Leste do Sul (Manhuaçu)',
+	'3111': 'Nordeste (Teófilo Otoni)',
+	'3112': 'Triangulo do Sul (Uberaba)',
+	'3113': 'Triangulo do Norte (Uberlândia)',
+	'3114': 'Vale do Aço (Ipatinga)',
+	'3205': 'Sul (Cachoeiro de Itapemirim)',
+	'3207': 'Metropolitana (Vitória)',
+	'3209': 'Central/Norte (Linhares)',
+	'3310': 'Macrorregião III (Campos dos Goytacazes)',
+	'3311': 'Macrorregião II (Rio de Janeiro)',
+	'3312': 'Macrorregião I (Volta Redonda)',
+	'3518': 'RRAS9 (Bauru)',
+	'3519': 'RRAS8 (Sorocaba)',
+	'3520': 'RRAS7 (Santos)',
+	'3521': 'RRAS6 (São Paulo)',
+	'3522': 'RRAS5 (Osasco)',
+	'3523': 'RRAS4 (Taboão da Serra)',
+	'3524': 'RRAS3 (Francisco Morato)',
+	'3525': 'RRAS2 (Guarulhos)',
+	'3526': 'RRAS17 (São José dos Campos)',
+	'3527': 'RRAS16 (Jundiaí)',
+	'3528': 'RRAS15 (Campinas)',
+	'3529': 'RRAS14 (Piracicaba)',
+	'3530': 'RRAS13 (Ribeirão Preto)',
+	'3531': 'RRAS12 (São José do Rio Preto)',
+	'3532': 'RRAS11 (Presidente Prudente)',
+	'3533': 'RRAS10 (Marília)',
+	'3534': 'RRAS1 (São Caetano do Sul)',
+	'4105': 'Macrorregional Norte (Londrina)',
+	'4106': 'Macrorregional Noroeste (Maringá)',
+	'4107': 'Macrorregional Leste (Curitiba)',
+	'4108': 'Macrorregião Oeste (Cascavel)',
+	'4210': 'Sul (Criciúma)',
+	'4211': 'Planalto Norte e Nordeste (Joinville)',
+	'4212': 'Meio Oeste e Serra Catarinense (Lages)',
+	'4213': 'Grande Oeste (Chapecó)',
+	'4214': 'Grande Florianopolis (Florianópolis)',
+	'4215': 'Foz do Rio Itajaí (Itajaí)',
+	'4216': 'Alto Vale do Itajaí (Blumenau)',
+	'4308': 'Vales (Santa Cruz do Sul)',
+	'4309': 'Sul (Pelotas)',
+	'4310': 'Serra (Caxias do Sul)',
+	'4311': 'Norte (Passo Fundo)',
+	'4312': 'Missioneira (Santo Ângelo)',
+	'4313': 'Metropolitana (Porto Alegre)',
+	'4314': 'Centro-Oeste (Santa Maria)',
+	'5005': 'Três Lagoas (Três Lagoas)',
+	'5006': 'Dourados (Dourados)',
+	'5007': 'Corumba (Corumbá)',
+	'5008': 'Campo Grande (Campo Grande)',
+	'5101': 'Macrorregião Sul  (Rondonópolis)',
+	'5102': 'Macrorregião Oeste (Pontes e Lacerda)',
+	'5103': 'Macrorregião Norte  (Sinop)',
+	'5104': 'Macrorregião Leste (Barra do Garças)',
+	'5105': 'Macrorregião Centro-Norte (Cuiabá)',
+	'5206': 'Macrorregião Sudoeste (Rio Verde)',
+	'5207': 'Macrorregião Nordeste (Formosa)',
+	'5208': 'Macrorregião Centro-Oeste (Goiânia)',
+	'5209': 'Macrorregião Centro-Norte (Anápolis)',
+	'5210': 'Macrorregião Centro Sudeste (Catalão)',
+	'5302': 'Distrito Federal (Brasília)',
 }
 
 def format_ine(numero):
@@ -289,7 +308,6 @@ def create_box(cnes, export=False):
     parametro_cadastral = 0
     for i in range(len(cnes.CO_EQUIPE)):
         # <p><b>{tipo_descricao.get(int(cnes.TP_EQUIPE[i])) if cnes.DS_EQUIPE[i] is None else cnes.DS_EQUIPE[i]}</b> ({tipo_sigla.get(int(cnes.TP_EQUIPE[i])) if cnes.SG_EQUIPE[i] is None else cnes.SG_EQUIPE[i]})<br/>
-        
         # To do: Acrescentar informações diferentes para cada tipo de unidade
         # if cnes.TP_EQUIPE == 72:
         #     # Modalidade da emulti
@@ -301,10 +319,10 @@ def create_box(cnes, export=False):
         #     pass #eSB
         # else:
         #     pass #esf eap eapp
+        #{"<span style='color:#F90'>(carga horária inválida para financiamento)</span><br/>" if 'ST_EQUIPE_VALIDA' in cnes and cnes.ST_EQUIPE_VALIDA[i] == 'N' else ""}
         linha = f"""
             <p><b>{tipo_sigla.get(int(cnes.TP_EQUIPE[i])) +' - '+ tipo_descricao.get(int(cnes.TP_EQUIPE[i])) if "DS_EQUIPE" not in cnes else cnes.DS_EQUIPE[i]}</b><br/>
             {cnes.NO_REFERENCIA[i]} (INE:{cnes.CO_EQUIPE[i]})<br/>
-            {"<span style='color:#F90'>(carga horária inválida para financiamento)</span><br/>" if 'ST_EQUIPE_VALIDA' in cnes and cnes.ST_EQUIPE_VALIDA[i] == 'N' else ""}
             <b>PARÂMETRO CADASTRAL: </b>{cnes.PARAMETRO_CADASTRAL[i]:n}<br/>
             <b>PESSOAS CADASTRADAS: </b>{cnes.CADASTROS_VINCULADOS[i]:n}<br/>
             <b>PESSOAS ACOMPANHADAS: </b>{cnes.CADASTROS_ACOMPANHADOS[i]:n}</p>
@@ -435,6 +453,8 @@ def get_setores(UF, MACRO):
     elif os.path.exists('./shapes/setores_light_densidade.gpkg'):
         setores_global = gpd.read_file('./shapes/setores_light_densidade.gpkg')
     setores_global =  setores_global.loc[setores_global.CO_MACRORREGIONAL==int(MACRO)]
+    #Não estava gerando a coluna de geoid
+    setores_global['geoid'] = setores_global.index.astype(str)
     return gpd.GeoDataFrame(setores_global, geometry='geometry')
     from shapely.validation import make_valid
     
@@ -699,8 +719,8 @@ def gera_mapa_densidade(UF, MACRO, export=False):
     return map
 
 def gera_mapa_ruralidade(UF):
-    distancias = pd.read_parquet(f'./dados/distancias/{UF}.parquet').rename(columns={'CD_SETOR': 'ID_SETOR'})
-    return distancias.sort_values(by=['CO_CNES','distancia'], ascending=True).reset_index(drop=True)            
+    print('Em breve')
+    #return 
 
 def convert_keys_to_int(d):
     """
@@ -731,7 +751,10 @@ def convert_keys_to_int(d):
 
 
 def get_distancias(UF):
-    distancias = pd.read_parquet(f'./dados/distancias/{UF}.parquet').rename(columns={'CD_SETOR': 'ID_SETOR'})
+    if os.path.exists(f'../dados/distancias/{UF}.parquet'):
+        distancias = pd.read_parquet(f'../dados/distancias/{UF}.parquet').rename(columns={'CD_SETOR': 'ID_SETOR'})
+    elif os.path.exists(f'./dados/distancias/{UF}.parquet'):
+        distancias = pd.read_parquet(f'./dados/distancias/{UF}.parquet').rename(columns={'CD_SETOR': 'ID_SETOR'})    
     return distancias.sort_values(by=['CO_CNES','distancia'], ascending=True).reset_index(drop=True)
 
 def format_population(x):
