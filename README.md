@@ -12,15 +12,15 @@ Foram criados três tipos de mapas, utilizando dados abertos disponibilizados pe
 
 ### Mapas de Demografia
 
-Para gerar o mapa de demografia, utilizamos scripts usando um notebook (scripts/demografia_notebook.ipynb).
+Para gerar o mapa de demografia, utilizamos scripts usando um notebook (scripts/demografia.ipynb).
 
 ### Mapas de Equipes
 
-Para gerar o mapa de demografia, utilizamos scripts usando um notebook (scripts/equipes_notebook.ipynb).
+Para gerar o mapa de demografia, utilizamos scripts usando um notebook (scripts/equipes.ipynb).
 
 ### Mapas de cobertura APS
 
-Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (scripts/cobertura_aps_notebook.ipynb).
+Para gerar o mapa de cobertura APS, utilizamos scripts usando um notebook (scripts/cobertura.ipynb).
 
 #### Script para gerar distâncias
 
