@@ -30,8 +30,8 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <!-- Radio Buttons -->
         <div id="radio-group-menu" style="display: block; width: 90%;">
-            <input type="radio" id="ruralidades-menu" name="map-type-menu" value="ruralidade" checked>
-            <label for="ruralidades-menu">Demografia</label>
+            <input type="radio" id="densidades-menu" name="map-type-menu" value="densidade" checked>
+            <label for="densidades-menu">Demografia</label>
     
             <input type="radio" id="equipes-menu" name="map-type-menu" value="equipe">
             <label for="equipes-menu">Equipes</label>
@@ -118,8 +118,8 @@
         <div class="selection-container">
             <!-- Radio Buttons -->
             <div id="radio-group">
-                <input type="radio" id="ruralidades" name="map-type" value="ruralidade" checked>
-                <label for="ruralidades">Demografia</label>
+                <input type="radio" id="densidades" name="map-type" value="densidade" checked>
+                <label for="densidades">Demografia</label>
     
                 <input type="radio" id="equipes" name="map-type" value="equipe">
                 <label for="equipes">Equipes</label>
@@ -185,7 +185,7 @@
         <div id="loading-message"><img src="assets/icons/spinner.gif" alt="Carregando"><br />Carregando...</div>
         
         <!-- Área do mapa -->
-        <iframe id="iframe" src="./mapas/ruralidade/AC.html" frameborder="0" loading="lazy"></iframe>
+        <iframe id="iframe" src="mapas/ruralidade/AC.html" frameborder="0" loading="lazy"></iframe>
         
         <!-- Janela de Informações -->
         <div id="info-icon" onclick="toggleInfoModal()" title="Clique para mais informações" style="cursor: pointer;">i</div>
@@ -292,7 +292,7 @@
         </div>`
     
         const infoTexts = {
-            ruralidade: texto_demo,
+            densidade: texto_demo,
             equipe: texto_equipe,
             cobertura: texto_cobertura
     };
@@ -330,34 +330,34 @@
     const macrorregioesMenu = document.getElementById("macroregion-selector-menu");
     const macrorregioesBody = document.getElementById("macroregion-selector");
 
-    const macrorregioes = {
-        'AC': [[1201], ['Macro Única - AC']],
-        'AL': [[2703, 2704],['2ª Macrorregião de Saúde', '1ª Macrorregião de Saúde']],
-        'AM': [[1302, 1303, 1304], ['Oeste', 'Leste', 'Central']],
-        'AP': [[1601], ['Macro Única - AP']],
-        'BA': [[2910, 2911, 2912, 2913, 2914, 2915, 2916, 2917, 2918],['Sul (NBS - Ilhéus)','Sudoeste (NBS - Vitória da Conquista)','Oeste (NBS - Barreiras)','Norte (NRS - Juazeiro)','Nordeste (NRS - Alagoinhas)','Leste (NRS - Salvador)','Extremo Sul (NRS - Teixeira de Freitas)','Centro-Leste (NRS - Feira de Santana)','Centro-Norte (NRS - Jacobina)']],
-        'CE': [[2306, 2307, 2308, 2309, 2310],['Litoral Leste/Jaguaribe','Sertão Central','Cariri','Sobral','Fortaleza']],
-        'DF': [[5302], ['Distrito Federal']],
-        'ES': [[3205, 3207, 3209], ['Sul', 'Metropolitana', 'Central Norte']],
-        'GO': [[5206, 5207, 5208, 5209, 5210],['Macrorregião Sudoeste','Macrorregião Nordeste','Macrorregião Centro-Oeste','Macrorregião Centro-Norte','Macrorregião Centro Sudeste']],
-        'MA': [[2109, 2110, 2111],['Macrorregião Sul', 'Macrorregião Norte', 'Macrorregião Leste']],
-        'MG': [[3101,3102,3103,3104,3105,3106,3107,3108,3109,3110,3111,3112,3113,3114,3115,3116],['Sul','Centro Sul','Centro','Jequitinhonha','Oeste','Leste','Sudeste','Norte','Noroeste','Leste do Sul','Nordeste','Triângulo do Sul','Triângulo do Norte','Vale do Aço','Extremo Sul','Sudoeste']],
-        'MS': [[5005, 5006, 5007, 5008],['Três Lagoas', 'Dourados', 'Corumbá', 'Campo Grande']],
-        'MT': [[5101, 5102, 5103, 5104, 5105, 5106],['Macrorregião Sul ','Macrorregião Oeste','Macrorregião Norte ','Macrorregião Leste','Macrorregião Centro-Norte','Macrorregião Centro-Noroeste']],
-        'PA': [[1509, 1510, 1511, 1512],['Macrorregional IV','Macrorregional III ','Macrorregional II','Macrorregional I']],
-        'PB': [[2501, 2502, 2503],['Macrorregião III - Sertão/Alto Sertão','Macrorregião II - Campina Grande','Macrorregião I - João Pessoa']],
-        'PE': [[2605, 2606, 2607, 2608],['Vale do S.Francisco e Araripe', 'Sertão', 'Metropolitana', 'Agreste']],
-        'PI': [[2207, 2208, 2209, 2210],['Semi-árido', 'Meio Norte', 'Litoral', 'Cerrados']],
-        'PR': [[4105, 4106, 4107, 4108],['Macrorregional Norte','Macrorregional Noroeste','Macrorregional Leste','Macrorregião Oeste']],
-        'RJ': [[3312], ['Macrorregião I']],
-        'RN': [[2401, 2402], ['Macrorregião II', 'Macrorregião I']],
-        'RO': [[1101, 1102],['Macrorregional II (Cacoal)', 'Macrorregião I - Porto Velho']],
-        'RR': [[1401], ['Macro-Roraima']],
-        'RS': [[4308, 4309, 4310, 4311, 4312, 4313, 4314],['VALES','Sul','Serra','Norte','Missioneira','Metropolitana','Centro-Oeste']],
-        'SC': [[4210, 4211, 4213, 4214, 4215, 4216, 4217, 4218], ['Sul','Planalto Norte e Nordeste','Grande Oeste','Grande Florianópolis','Foz do Rio Itajaí','Vale do Itajaí','Meio Oeste','Serra Catarinense']],
-        'SE': [[2801], ['Macro Única']],
-        'SP': [[3518,3519,3520,3521,3522,3523,3524,3525,3526,3527,3528,3529,3530,3531,3532,3533,3534,3535],['RRAS9','RRAS8','RRAS7','RRAS6','RRAS5','RRAS4','RRAS3','RRAS2','RRAS17','RRAS16','RRAS15','RRAS14','RRAS13','RRAS12','RRAS11','RRAS10','RRAS1','RRAS 18']],
-        'TO': [[1701, 1702],['Macrorregião de Saúde Norte', 'Macrorregião Centro-Sul']]
+    const macrorregioes =  {
+        "AC": [[1201],["Macro Única - AC (Rio Branco)"]],
+        "AL": [[2703,2704],["2ª Macrorregião de Saúde (Arapiraca)","1ª Macrorregião de Saúde (Maceió)"]],
+        "AM": [[1302,1303,1304],["Oeste (Tabatinga)","Leste (Parintins)","Central (Manaus)"]],
+        "AP": [[1601],["Macro Única - AP (Macapá)"]],
+        "BA": [[2910,2911,2912,2913,2914,2915,2916,2917,2918],["Sul (Ilhéus)","Sudoeste (Vitória da Conquista)","Oeste (Barreiras)","Norte (Juazeiro)","Nordeste (Alagoinhas)","Leste (Salvador)","Extremo Sul (Teixeira de Freitas)","Centro-Leste (Feira de Santana)","Centro - Norte (Jacobina)"]],
+        "CE": [[2306,2307,2308,2309,2310],["5ª Macro - Litoral Leste/Jaguaribe (Aracati)","4ª Macro - Sertão Central (Quixadá)","3ª Macro - Cariri (Juazeiro do Norte)","2ª Macro - Sobral (Sobral)","1ª Macro - Fortaleza (Fortaleza)"]],
+        "DF": [[5302],["Distrito Federal (Brasília)"]],
+        "ES": [[3205,3207,3209],["Sul (Cachoeiro de Itapemirim)","Metropolitana (Vitória)","Central/Norte (Linhares)"]],
+        "GO": [[5206,5207,5208,5209,5210],["Macrorregião Sudoeste (Rio Verde)","Macrorregião Nordeste (Formosa)","Macrorregião Centro-Oeste (Goiânia)","Macrorregião Centro-Norte (Anápolis)","Macrorregião Centro Sudeste (Catalão)"]],
+        "MA": [[2109,2110,2111],["Macrorregião Sul (Imperatriz)","Macrorregião Norte (São Luís)","Macrorregião Leste (Caxias)"]],
+        "MG": [[3101,3102,3103,3104,3105,3106,3107,3108,3109,3110,3111,3112,3113,3114],["Sul (Poços de Caldas)","Centro Sul (São João Del Rei)","Centro (Belo Horizonte)","Jequitinhonha (Diamantina)","Oeste (Divinópolis)","Leste (Governador Valadares)","Sudeste (Juiz de Fora)","Norte (Montes Claros)","Noroeste (Patos de Minas)","Leste do Sul (Manhuaçu)","Nordeste (Teófilo Otoni)","Triangulo do Sul (Uberaba)","Triangulo do Norte (Uberlândia)","Vale do Aço (Ipatinga)"]],
+        "MS": [[5005,5006,5007,5008],["Três Lagoas (Três Lagoas)","Dourados (Dourados)","Corumba (Corumbá)","Campo Grande (Campo Grande)"]],
+        "MT": [[5101,5102,5103,5104,5105],["Macrorregião Sul  (Rondonópolis)","Macrorregião Oeste (Pontes e Lacerda)","Macrorregião Norte  (Sinop)","Macrorregião Leste (Barra do Garças)","Macrorregião Centro-Norte (Cuiabá)"]],
+        "PA": [[1509,1510,1511,1512],["Macrorregional IV (Marabá)","Macrorregional III  (Santarém)","Macrorregional II (Paragominas)","Macrorregional I (Belém)"]],
+        "PB": [[2501,2502,2503],["Macrorregião III - Sertão/Alto Sertão (Cajazeiras)","Macrorregião II - Campina Grande (Campina Grande)","Macrorregião I - João Pessoa (João Pessoa)"]],
+        "PE": [[2605,2606,2607,2608],["Vale do São Francisco e Araripe (Petrolina)","Sertão (Serra Talhada)","Metropolitana (Recife)","Agreste (Caruaru)"]],
+        "PI": [[2207,2208,2209,2210],["Semi-Árido (Picos)","Meio Norte (Teresina)","Litoral (Parnaíba)","Cerrados (Floriano)"]],
+        "PR": [[4105,4106,4107,4108],["Macrorregional Norte (Londrina)","Macrorregional Noroeste (Maringá)","Macrorregional Leste (Curitiba)","Macrorregião Oeste (Cascavel)"]],
+        "RJ": [[3310,3311,3312],["Macrorregião III (Campos dos Goytacazes)","Macrorregião II (Rio de Janeiro)","Macrorregião I (Volta Redonda)"]],
+        "RN": [[2401,2402],["Macrorregião II (Mossoró)","Macrorregião I (Natal)"]],
+        "RO": [[1101,1102],["Macrorregional II (Cacoal)","Macrorregião I (Porto Velho)"]],
+        "RR": [[1401],["Macro-Roraima (Boa Vista)"]],
+        "RS": [[4308,4309,4310,4311,4312,4313,4314],["Vales (Santa Cruz do Sul)","Sul (Pelotas)","Serra (Caxias do Sul)","Norte (Passo Fundo)","Missioneira (Santo Ângelo)","Metropolitana (Porto Alegre)","Centro-Oeste (Santa Maria)"]],
+        "SC": [[4210,4211,4212,4213,4214,4215,4216],["Sul (Criciúma)","Planalto Norte e Nordeste (Joinville)","Meio Oeste e Serra Catarinense (Lages)","Grande Oeste (Chapecó)","Grande Florianopolis (Florianópolis)","Foz do Rio Itajaí (Itajaí)","Alto Vale do Itajaí (Blumenau)"]],
+        "SE": [[2801],["Macro Única (Aracaju)"]],
+        "SP": [[3518,3519,3520,3521,3522,3523,3524,3525,3526,3527,3528,3529,3530,3531,3532,3533,3534],["RRAS9 (Bauru)","RRAS8 (Sorocaba)","RRAS7 (Santos)","RRAS6 (São Paulo)","RRAS5 (Osasco)","RRAS4 (Taboão da Serra)","RRAS3 (Francisco Morato)","RRAS2 (Guarulhos)","RRAS17 (São José dos Campos)","RRAS16 (Jundiaí)","RRAS15 (Campinas)","RRAS14 (Piracicaba)","RRAS13 (Ribeirão Preto)","RRAS12 (São José do Rio Preto)","RRAS11 (Presidente Prudente)","RRAS10 (Marília)","RRAS1 (São Caetano do Sul)"]],
+        "TO": [[1701,1702],["Macrorregião Norte (Araguaína)","Macrorregião Centro-Sul (Palmas)"]],
     }
 
     // Carregar o mapa com base na seleção
