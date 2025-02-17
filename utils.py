@@ -392,15 +392,21 @@ def gera_mapa_equipe(UF, MACRO=None, export=False):
     else:
         folium.features.GeoJson(macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)], name=nome_macro.get(str(MACRO)),
             style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)
+    
+    oms = OverlappingMarkerSpiderfier(
+        keep_spiderfied=True,  # Markers remain spiderfied after clicking
+        nearby_distance=20,  # Distance for clustering markers in pixel
+        circle_spiral_switchover=10,  # Threshold for switching between circle and spiral
+        leg_weight=2.0  # Line thickness for spider legs
+        )
+    oms.add_to(map)
+    
     folium.plugins.Geocoder().add_to(map)
-
     #map.add_child(MeasureControl())
-    folium.LayerControl().add_to(map)
-
     #Draw(export=True).add_to(map)
     Draw().add_to(map)
-
     folium.LayerControl().add_to(map)
+    
     if export:
         html_map = map.get_root().render()
         html_map = html_map.replace(
@@ -542,6 +548,16 @@ def gera_mapa_densidade(UF, MACRO=None, export=False):
     # Criando o layer de contorno do estado
     #folium.features.GeoJson(estados.loc[estados.SIGLA == UF], name=UF, style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)    
     # Add the marker cluster to the map
+    
+    oms = OverlappingMarkerSpiderfier(
+        keep_spiderfied=True,  # Markers remain spiderfied after clicking
+        nearby_distance=20,  # Distance for clustering markers in pixel
+        circle_spiral_switchover=10,  # Threshold for switching between circle and spiral
+        leg_weight=2.0  # Line thickness for spider legs
+        )
+    oms.add_to(map)
+
+
     marker_cluster.add_to(map)
 
     folium.LayerControl().add_to(map)
