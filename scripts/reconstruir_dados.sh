@@ -1,34 +1,50 @@
 #!/bin/bash
 
-# Criar pastas necessárias apenas se não existirem
-for dir in "./output/site/mapas/cobertura/" "./output/site/mapas/equipe/" "./output/site/mapas/densidade/"; do
+set -e  #interrompe a execução do script se ocorrer um erro
+
+#verifica se o parâmetro de remoção foi passado
+REMOVER=false
+if [ "$1" = "True" ] || [ "$1" = "true" ]; then
+    REMOVER=true
+fi
+
+#criar pastas necessárias para exportação dos mapas, caso não existam
+for dir in "../output/site/mapas/cobertura/" "../output/site/mapas/equipe/" "../output/site/mapas/densidade/"; do
     if [ ! -d "$dir" ]; then
-        mkdir -p "$dir" && echo "Pasta criada: $dir" || echo "Erro ao criar pasta: $dir"
+        if mkdir -p "$dir"; then
+            echo "[OK] pasta criada: $dir"
+        else
+            echo "[ERRO] falha ao criar pasta: $dir" >&2
+            exit 1
+        fi
     else
-        echo "Pasta já existe: $dir"
+        echo "[INFO] pasta já existe: $dir"
     fi
 done
 
-OUTPUT_FILE="shapes/setores_ligth_processado.gpkg"
+#reconstruindo os arquivos
+reconstruir_arquivo() {
+    local input_pattern=$1
+    local output_file=$2
+    local remover=$3
+    
+    echo "[INFO] reconstruindo $output_file..."
+    if cat $input_pattern > "$output_file"; then
+        if [ "$remover" = true ]; then
+            rm -f $input_pattern
+            echo "[OK] partes removidas após reconstrução: $input_pattern"
+        fi
+        echo "[OK] arquivo reconstruído com sucesso: $output_file"
+    else
+        echo "[ERRO] falha ao reconstruir $output_file" >&2
+        exit 1
+    fi
+}
 
-echo "Unindo arquivos em $OUTPUT_FILE..."
-cat shapes/setores_ligth_processado_part_* > "$OUTPUT_FILE"
-#rm -f shapes/setores_ligth_processado_part_*  # Remove as partes após a reconstrução
-echo "Arquivo reconstruído com sucesso: $OUTPUT_FILE"
+#reconstruindo os arquivos
+reconstruir_arquivo "shapes/setores_ligth_processado_part_*" "shapes/setores_ligth_processado.gpkg" "$REMOVER"
+reconstruir_arquivo "shapes/setores_light_densidade_part_*" "shapes/setores_light_densidade.gpkg" "$REMOVER"
+reconstruir_arquivo "dados/distancias/BR_part_*" "dados/distancias/BR.parquet" "$REMOVER"
+reconstruir_arquivo "dados/distancias/SP_part_*" "dados/distancias/SP.parquet" "$REMOVER"
 
-echo "Reconstruindo arquivo shapes/setores_light_densidade.gpkg..."
-cat shapes/setores_light_densidade_part_* > shapes/setores_light_densidade.gpkg
-#rm -f shapes/setores_light_densidade_part_*  # Remove as partes após a reconstrução
-echo "Arquivo reconstruído com sucesso: shapes/setores_light_densidade.gpkg"
-
-echo "Reconstruindo arquivos de distâncias..."
-
-cat dados/distancias/BR_part_* > dados/distancias/BR.parquet
-#rm -f dados/distancias/BR_part_*  # Remove as partes após a reconstrução
-echo "Arquivo reconstruído: dados/distancias/BR.parquet"
-
-cat dados/distancias/SP_part_* > dados/distancias/SP.parquet
-#rm -f dados/distancias/SP_part_*  # Remove as partes após a reconstrução
-echo "Arquivo reconstruído: dados/distancias/SP.parquet"
-
-echo "Todos os arquivos foram reconstruídos com sucesso!"
+echo "[SUCESSO] todos os arquivos foram reconstruídos com sucesso!"
