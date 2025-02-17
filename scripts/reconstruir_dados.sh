@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Criar pastas necessárias apenas se não existirem
+for dir in "./output/site/mapas/cobertura/" "./output/site/mapas/equipe/" "./output/site/mapas/densidade/"; do
+    if [ ! -d "$dir" ]; then
+        mkdir -p "$dir" && echo "Pasta criada: $dir" || echo "Erro ao criar pasta: $dir"
+    else
+        echo "Pasta já existe: $dir"
+    fi
+done
+
 OUTPUT_FILE="shapes/setores_ligth_processado.gpkg"
 
 echo "Unindo arquivos em $OUTPUT_FILE..."
