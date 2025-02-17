@@ -41,7 +41,21 @@ A página inicial do site pode ser acessada no caminho `output/site/index.html`,
 
 Antes de executar o projeto, é imprescindível que todas as bases estejam corretas. De antemão, será necessário gerar a base extraída do IBGE e outros arquivos. Para isso, execute o script `reconstruir_dados.sh` com os seguintes comandos:
 
+1. **Conceder permissões de execução:**
+
 ```sh
 chmod +x scripts/reconstruir_dados.sh
+```
+
+2. **Executar o script:**
+
+Para gerar os arquivos necessários:
+```sh
 ./scripts/reconstruir_dados.sh
+```
+ou
+
+Caso deseje remover os arquivos de entrada após a reconstrução, passe o parâmetro `True` ou `true`:
+```sh
+./scripts/reconstruir_dados.sh True
 ```
