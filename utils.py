@@ -21,6 +21,7 @@ import os
 os.environ['USE_PYGEOS'] = '0'
 import geopandas as gpd
 import pandas as pd
+from folium.plugins import MeasureControl, Draw, OverlappingMarkerSpiderfier
 pd.set_option('display.max_columns', 200)
 import warnings
 warnings.filterwarnings("ignore")
@@ -197,6 +198,35 @@ nome_macro = {
 	'5302': 'Distrito Federal (Brasília)',
 }
 
+
+# estilos da scroll bar para injection no css
+custom_scrollbar_css = """
+        <style>
+        .scrollbar {
+            background-color: #FAFAFA;
+            overflow-y: auto;
+            margin: 15px 0px;
+            padding: 0px 10px;
+            max-height: 250px;
+            border: 1px solid #EEE;
+        }
+        .scrollbar::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+        .scrollbar::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+        .scrollbar::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #f1942f;
+        }
+        </style>
+        """
+
 def format_ine(numero):
     try:
         return f'{int(numero):010d}'
@@ -218,7 +248,6 @@ def get_unidades(UF='DF', MACRO=None, ativas=True):
         unidades = gpd.read_file('./shapes/unidades_cnes_realocadas.gpkg', driver='GPKG')
 
     unidades = unidades.astype({'CO_MACRORREGIONAL':'Int64'})
-    # filtrando unidades de SE
     if MACRO is None:
         unidades = unidades.loc[(unidades.SG_UF==UF) & unidades.TP_EQUIPE.isin([70,71,72,73,74,76]) & unidades.TP_UNIDADE.isin([1,2,15,32,40,71])]
     else:
@@ -226,33 +255,6 @@ def get_unidades(UF='DF', MACRO=None, ativas=True):
     if ativas:
         return unidades.loc[unidades.ST_ATIVA==1]
     return unidades
-
-# Configurações de estilos dos Markers e conteúdos das caixas das equipes
-def get_caixa_old(equipe):
-    return f"""
-     <div style="width:250px;">
-        <span style="font-family: 'Roboto', sans-serif; font-weight: 800; color:#F90; font-size: 1.45em; margin-bottom: 5px; display: block; border-bottom: 2px solid #DDD;">{equipe.NO_MUNICIPIO}</span>
-        <p style ="font-size: 0.9em"><b>ENDEREÇO:</b> {equipe.NO_LOGRADOURO}<br/>
-        <b>COORDENADA:</b> {round(equipe.geometry.y,5):n}, {round(equipe.geometry.x,5):n}<br/>
-        <b>ÁREA: </b>{equipe.CO_AREA}<br/>
-        {"<span style='color:#F90'>(original fora do municipio)</span>" if equipe.DENTRO_MUNICIPIO == False else ""}
-        <div style="margin: 2px 0; padding:10px 15px; background-color: #EEE;">
-        <b>{equipe.DS_TIPO_UNIDADE}</b><br/>
-        {equipe.NO_FANTASIA} (CNES:{format_cnes(equipe.CO_CNES)})<br/>
-        </div>
-        <div style="overflow-y: auto; margin-top: 15px; max-height: 250px; padding: 10px; border: 1px solid #EEE; background-color: #FAFAFA;">
-        <b>{equipe.DS_EQUIPE}</b><br/>
-        {equipe.NO_REFERENCIA} (INE:{format_ine(equipe.CO_EQUIPE)})<br/>
-        <b>PESSOAS CADASTRADAS: </b>{equipe.CADASTROS_VINCULADOS:n}<br/>
-        <b>PESSOAS ACOMPANHADAS: </b>{equipe.CADASTROS_ACOMPANHADOS:n}<br/>
-        </div>
-     </div>
-     """
-# Lixos?
-marker_colors = ['red','blue','gray','darkred','lightred','orange','beige','green','darkgreen','lightgreen','darkblue','lightblue','purple','darkpurple','pink','cadetblue','lightgray','black']
-cor_equipe = {73:'gray', 70:'red', 71:'green', 72:'darkblue', 74:'black', 76:'orange'}
-icon_equipe = {71:'face-laugh-wink', 73:'truck-medical', 74:'building-shield'} #tooth
-
 
 def get_caixa(cnes, export=False):
    if export:
@@ -343,35 +345,6 @@ def create_box(cnes, export=False):
     fim = f'</div></div>'
     return inicio + soma + equipes + fim
 
-#icones -> https://fontawesome.com/icons/categories/medical-health
-def gera_mapa_equipe_old(UF, MACRO, export=False):
-   cor_equipe = {73:'steelblue', 70:'blue', 71:'gray', 72:'red', 74:'black', 76:'orange'}
-   icon_equipe = {71:'face-laugh-wink', 73:'truck-medical', 74:'building-shield'} #tooth
-   unidades = get_unidades(UF, MACRO, True)
-   if os.path.exists('../shapes/macro.gpkg'):
-      macro = gpd.read_file('../shapes/macro.gpkg')
-   elif os.path.exists('./shapes/macro.gpkg'):
-      macro = gpd.read_file('./shapes/macro.gpkg')
-   macro = macro.astype({'CO_MACRORREGIONAL':'Int64'})
-   centroUF = macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)].geometry.centroid.values
-   map = folium.Map(location=[centroUF.y,centroUF.x], tiles = 'cartodbpositron', control_scale=True, prefer_canvas=True, zoom_start=12)
-   for key, value in tipo_sigla.items():
-      temp_group = folium.FeatureGroup(value)
-      #todo_criar grupo de equipes do estabelecimento
-      grupo_estabelecimento = ''
-      for index, equipe in unidades.loc[unidades.TP_EQUIPE==key].iterrows():
-         folium.Marker([equipe.geometry.y, equipe.geometry.x], icon=folium.Icon(color=cor_equipe.get(key, 'steelblue'), icon='ship' if (equipe.TP_UNIDADE == 32 or equipe.CO_SUB_TIPO_EQUIPE == 12) else icon_equipe.get(key, 'house-medical'), prefix='fa'),popup=get_caixa(equipe), tooltip=equipe.NO_REFERENCIA).add_to(temp_group)
-      temp_group.add_to(map)
-      
-   # Criando o layer de contorno
-   folium.features.GeoJson(macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)], name=nome_macro.get(str(MACRO)),
-      style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)
-
-   folium.LayerControl().add_to(map)
-   if export:
-      map.save(f"./output/site/mapas/equipe/{UF}_{MACRO}.html")
-   return map
-
 def gera_mapa_equipe(UF, MACRO=None, export=False):
     icon_sigla_equipe = {'eSF':'house-medical', 'eSFR':'ship', 'eSB':'face-laugh-wink', 'eMulti':'house-medical', 'eAPP':'building-shield', 'eAP':'house-medical','eCR':'truck-medical'}
     cor_sigla_equipe = {'eCR':'gray','eSF':'red','eSFR':'blue', 'eSB':'green','eMulti':'darkblue','eAPP':'black', 'eAP':'orange'}    
@@ -419,6 +392,13 @@ def gera_mapa_equipe(UF, MACRO=None, export=False):
     else:
         folium.features.GeoJson(macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)], name=nome_macro.get(str(MACRO)),
             style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)
+    folium.plugins.Geocoder().add_to(map)
+
+    #map.add_child(MeasureControl())
+    folium.LayerControl().add_to(map)
+
+    #Draw(export=True).add_to(map)
+    Draw().add_to(map)
 
     folium.LayerControl().add_to(map)
     if export:
@@ -428,8 +408,8 @@ def gera_mapa_equipe(UF, MACRO=None, export=False):
             f"{custom_scrollbar_css}</head>"
         )
 
-        diretorio_1 = "./output/site/mapas/equipe/"
-        diretorio_2 = "../output/site/mapas/equipe/"
+        diretorio_1 = "../output/site/mapas/equipe/"
+        diretorio_2 = "./output/site/mapas/equipe/"
 
         if os.path.exists(diretorio_1):
             diretorio = diretorio_1
@@ -446,189 +426,49 @@ def gera_mapa_equipe(UF, MACRO=None, export=False):
 
     return map
 
-
-def get_setores(UF, MACRO):
+def get_setores(UF, MACRO=None):
     if os.path.exists('../shapes/setores_light_densidade.gpkg'):
         setores_global = gpd.read_file('../shapes/setores_light_densidade.gpkg')
     elif os.path.exists('./shapes/setores_light_densidade.gpkg'):
         setores_global = gpd.read_file('./shapes/setores_light_densidade.gpkg')
-    setores_global =  setores_global.loc[setores_global.CO_MACRORREGIONAL==int(MACRO)]
+    if MACRO is not None:
+        setores_global =  setores_global.loc[setores_global.CO_MACRORREGIONAL==int(MACRO)]
+    else:
+        setores_global =  setores_global.loc[setores_global.CD_UF==co_uf_ibge[UF]]
     #Não estava gerando a coluna de geoid
     setores_global['geoid'] = setores_global.index.astype(str)
     return gpd.GeoDataFrame(setores_global, geometry='geometry')
-    from shapely.validation import make_valid
-    
-    import numpy as np
-    setores = gpd.read_file('./shapes/setores_light.gpkg')
-    setores = setores.astype({'CO_MACRORREGIONAL':'Int64'})
-    setores =  setores.loc[setores.CO_MACRORREGIONAL==int(MACRO)]
-    setores['Densidade'] = setores.v0001/setores.AREA_KM2
-    #setores['Log_Densidade'] = np.log(setores['Densidade'].replace(0, np.nan).fillna(0)) #np.log(setores['Densidade'])
-    # Suavizado pela raiz quadrada
-    setores['Log_Densidade'] = np.sqrt(setores['Densidade'].replace(0, np.nan).fillna(0))
-    setores['Log_Densidade'] = setores['Log_Densidade'].replace([np.inf, -np.inf], 0)  # Substitui Inf por NaN
-    # Suavizado por box-cox
-    #from scipy import stats
-    #setores['Densidade_Ajustada'] = setores['Densidade'] + 1  # Adiciona 1 para evitar zeros
-    #setores['Log_Densidade'], _ = stats.boxcox(setores['Densidade_Ajustada'])
 
-    setores.CD_SIT = pd.to_numeric(setores.CD_SIT)
-    setores.CD_TIPO = pd.to_numeric(setores.CD_TIPO)
-    # Convertendo os códigos para a descrição
-    setores['CD_SIT'] = setores.CD_SIT.map(ds_cd_sit)
-    setores['CD_TIPO'] = setores.CD_TIPO.map(ds_cd_tipo)
-    # Criando o geoID para o geojson
-    setores['geoid'] = setores.index.astype(str)
-    setores = setores[['CD_MUN','geoid', 'CO_MACRORREGIONAL', 'CD_SETOR', 'SITUACAO', 'CD_SIT', 'CD_TIPO', 'AREA_KM2', 'v0001', 'Densidade','Log_Densidade', 'geometry']]
-    setores['geometry'] = setores['geometry'].apply(make_valid)
-    return gpd.GeoDataFrame(setores, geometry='geometry')
+def gera_mapa_densidade(UF, MACRO=None, export=False):
+    if MACRO is None:
+        unidades = get_unidades(UF, ativas=True)
+        if os.path.exists('../shapes/estados.json'):
+            estados = gpd.read_file('../shapes/estados.json')
+        elif os.path.exists('./shapes/estados.json'):
+            estados = gpd.read_file('./shapes/estados.json')
+        setores = get_setores(UF, None)
+        estados_uf = estados.loc[estados.SIGLA==UF]
+        centroUF = estados_uf.geometry.centroid.values
+        arquivo = UF
+    else: 
+        unidades = get_unidades(UF, MACRO)
+        setores = get_setores(UF, MACRO)
+        #carrega o estado para colocar um contorno e definir o centro
+        if os.path.exists('../shapes/macro.gpkg'):
+            macro = gpd.read_file('../shapes/macro.gpkg')
+        elif os.path.exists('./shapes/macro.gpkg'):
+            macro = gpd.read_file('./shapes/macro.gpkg')
+        macro = macro.astype({'CO_MACRORREGIONAL':'Int64'})
+        centroUF = macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)].geometry.centroid.values
+        arquivo = f'{UF}_{MACRO}'
 
-# estilos da scroll bar para injection no css
-custom_scrollbar_css = """
-        <style>
-        .scrollbar {
-            background-color: #FAFAFA;
-            overflow-y: auto;
-            margin: 15px 0px;
-            padding: 0px 10px;
-            max-height: 250px;
-            border: 1px solid #EEE;
-        }
-        .scrollbar::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-            border-radius: 10px;
-            background-color: #F5F5F5;
-        }
-        .scrollbar::-webkit-scrollbar {
-            width: 10px;
-            background-color: #F5F5F5;
-        }
-        .scrollbar::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-            background-color: #f1942f;
-        }
-        </style>
-        """
-
-def gera_mapa_densidade(UF, MACRO, export=False):
-    unidades = get_unidades(UF, MACRO)
-    unidades_cnes = unidades.groupby(['CO_CNES','NO_FANTASIA','NO_MUNICIPIO','NO_LOGRADOURO','DS_TIPO_UNIDADE']).agg({'CO_EQUIPE':list, 'TP_EQUIPE':list, 'DS_EQUIPE':list,'SG_EQUIPE':list,'CO_AREA':list, 'NO_REFERENCIA':list, 'ST_EQUIPE_VALIDA':list, 'CADASTROS_ACOMPANHADOS':list,'CADASTROS_VINCULADOS':list, 'CADASTROS_PREVINE':list, 'PARAMETRO_CADASTRAL':list, 'LATITUDE':'mean', 'LONGITUDE':'mean', 'DENTRO_MUNICIPIO':'max'}).reset_index()
-    # Após juntar as médias das coordenadas (que deveriam ser iguais), a geometria é recalculada
-    unidades_cnes['geometry'] = [Point(point[0],point[1]) for point in zip(unidades_cnes.LONGITUDE, unidades_cnes.LATITUDE)]
-    setores = get_setores(UF, MACRO)
-    #carrega o estado para colocar um contorno e definir o centro
-    if os.path.exists('../shapes/macro.gpkg'):
-        macro = gpd.read_file('../shapes/macro.gpkg')
-    elif os.path.exists('./shapes/macro.gpkg'):
-        macro = gpd.read_file('./shapes/macro.gpkg')
-    macro = macro.astype({'CO_MACRORREGIONAL':'Int64'})
-    centroMacro = macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)].geometry.centroid.values
-
-    # Dissolve os setores por tipo
-    shape_tipos = setores[['CD_TIPO', 'geometry']].dissolve(by='CD_TIPO').reset_index()
-
-    # Shapes Complementares
-    quilombos = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento quilombola']
-    assentamentos = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrovila do PA']
-    indigenas = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento indígena']
-
-    # Criando o mapa com tile de fundo
-    map = folium.Map(location=[centroMacro.y,centroMacro.x], tiles = 'cartodbpositron', control_scale=True, prefer_canvas=True, zoom_start=11)
-    # Cria p objeto marker cluster 
-    marker_cluster = MarkerCluster(name="Unidades básicas de saúde")
-    # cria os estabelecimentos
-    for index, cnes in unidades_cnes.iterrows():
-        caixa = create_box(cnes, export)
-        folium.Marker([cnes.geometry.y, cnes.geometry.x], icon=folium.Icon(color="orange", icon="house-medical", prefix='fa'), popup=caixa, tooltip = cnes.NO_FANTASIA).add_to(marker_cluster)
-    
-    # Acrescentando os shapes
-    # shape dos setores censitarios
-    folium.Choropleth(
-        geo_data=setores,
-        name='Densidade demográfica',
-        data=setores,
-        columns=['geoid', 'Log_Densidade'],
-        key_on='feature.id',
-        fill_color='YlOrRd',
-        fill_opacity=0.8,
-        line_opacity=0.5,
-        line_color='black',
-        line_weight=.5,
-        smooth_factor=1.0,
-        nan_fill_color = "White",
-        legend_name= 'Raiz quadrada da densidade demográfica'
-        ).add_to(map)
-
-    # Criando o layer de quilombos
-    folium.features.GeoJson(quilombos, name='Agrupamentos Quilombolas',
-        style_function = lambda x: {'fillColor': '#669966', 
-                                        'color':'#669966', 
-                                        'fillOpacity': .5, 
-                                        'weight': 0.1,
-                                        'dash_array':'2'}
-        ).add_to(map)
-
-    # Criando o layer de assentamentos
-    folium.features.GeoJson(assentamentos, name='Agrovila: Projeto de Assentamento',
-        style_function = lambda x: {'fillColor': '#97d963', 
-                                        'color':'#97d963', 
-                                        'fillOpacity': .5, 
-                                        'weight': 0.1,
-                                        'dash_array':'2'}
-        ).add_to(map)
-
-    # Criando o layer de indigenas
-    folium.features.GeoJson(indigenas, name='Agrupamentos Indígenas',
-        style_function = lambda x: {'fillColor': '#c5dd2a', 
-                                        'color':'#c5dd2a', 
-                                        'fillOpacity': .5, 
-                                        'weight': 0.1,
-                                        'dash_array':'2'}
-        ).add_to(map)
-
-    # Criando o layer com os tooltips por cima de tudo
-    folium.features.GeoJson(setores, name='Informações dos setores',
-        style_function = lambda x: {'color':'transparent','fillColor':'transparent','weight':0},
-        tooltip = folium.features.GeoJsonTooltip(fields=['CD_SIT','CD_TIPO','v0001'],
-                                                aliases = ['Situação detalhada', 'Tipo do setor', 'População residente'],
-                                                labels=True, sticky=False),
-        highlight_function = lambda x: {'fillColor': '#ffffff', 'color':'#ffffff', 'fillOpacity': .5, 'weight': 0.1}).add_to(map)
-
-    # Criando o layer de contorno do estado
-    #folium.features.GeoJson(estados.loc[estados.SIGLA == UF], name=UF, style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)    
-    # Add the marker cluster to the map
-    marker_cluster.add_to(map)
-
-    folium.LayerControl().add_to(map)
-    
-    # Display/Export o mapa
-    if export:
-        html_map = map.get_root().render()
-        html_map = html_map.replace(
-            "</head>",
-            f"{custom_scrollbar_css}</head>"
-        )
-        with open(f"./output/site/mapas/ruralidade/{UF}_{MACRO}.html", "w", encoding='utf-8') as f:
-            f.write(html_map)
-        #map.save(f"./output/site/mapas/ruralidade/{UF}.html")
-    return map
-
-
-def gera_mapa_densidade(UF, MACRO, export=False):
-    unidades = get_unidades(UF, MACRO)
+    setores['CD_SIT'] = setores['CD_SIT'].astype(int)
+    setores['CD_SIT'] = setores['CD_SIT'].map(ds_cd_sit)
+    setores['CD_TIPO'] = setores['CD_TIPO'].astype(int)
+    setores['CD_TIPO'] = setores['CD_TIPO'].map(ds_cd_tipo)
     unidades_cnes = unidades.groupby(['CO_CNES','NO_FANTASIA','NO_MUNICIPIO','NO_LOGRADOURO','DS_TIPO_UNIDADE']).agg({'CO_EQUIPE':list, 'TP_EQUIPE':list, 'DS_EQUIPE':list,'SG_EQUIPE':list,'CO_AREA':list, 'NO_REFERENCIA':list, 'ST_EQUIPE_VALIDA':list,'CADASTROS_ACOMPANHADOS':list,'CADASTROS_VINCULADOS':list, 'CADASTROS_PREVINE':list, 'PARAMETRO_CADASTRAL':list, 'LATITUDE':'mean', 'LONGITUDE':'mean', 'DENTRO_MUNICIPIO':'max'}).reset_index()
     # Após juntar as médias das coordenadas (que deveriam ser iguais), a geometria é recalculada
     unidades_cnes['geometry'] = [Point(point[0],point[1]) for point in zip(unidades_cnes.LONGITUDE, unidades_cnes.LATITUDE)]
-    setores = get_setores(UF, MACRO)
-    #carrega o estado para colocar um contorno e definir o centro
-    if os.path.exists('../shapes/macro.gpkg'):
-        macro = gpd.read_file('../shapes/macro.gpkg')
-    elif os.path.exists('./shapes/macro.gpkg'):
-        macro = gpd.read_file('./shapes/macro.gpkg')
-    macro = macro.astype({'CO_MACRORREGIONAL':'Int64'})
-    centroMacro = macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)].geometry.centroid.values
-
     # Dissolve os setores por tipo
     shape_tipos = setores[['CD_TIPO', 'geometry']].dissolve(by='CD_TIPO').reset_index()
 
@@ -638,7 +478,7 @@ def gera_mapa_densidade(UF, MACRO, export=False):
     indigenas = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento indígena']
 
     # Criando o mapa com tile de fundo
-    map = folium.Map(location=[centroMacro.y,centroMacro.x], tiles = 'cartodbpositron', control_scale=True, prefer_canvas=True, zoom_start=11)
+    map = folium.Map(location=[centroUF.y,centroUF.x], tiles = 'cartodbpositron', control_scale=True, prefer_canvas=True, zoom_start=11)
     # Cria p objeto marker cluster 
     marker_cluster = MarkerCluster(name="Unidades básicas de saúde")
     # cria os estabelecimentos
@@ -706,16 +546,20 @@ def gera_mapa_densidade(UF, MACRO, export=False):
 
     folium.LayerControl().add_to(map)
     
+    diretorio_1 = "../output/site/mapas/densidade/"
+    diretorio_2 = "./output/site/mapas/densidade/"
+
+    if os.path.exists(diretorio_1):
+        diretorio = diretorio_1
+    elif os.path.exists(diretorio_2):
+        diretorio = diretorio_2
+    else:
+        diretorio = diretorio_1
+        os.makedirs(diretorio)
+
     # Display/Export o mapa
-    if export:
-        html_map = map.get_root().render()
-        html_map = html_map.replace(
-            "</head>",
-            f"{custom_scrollbar_css}</head>"
-        )
-        with open(f"./output/site/mapas/ruralidade/{UF}_{MACRO}.html", "w", encoding='utf-8') as f:
-            f.write(html_map)
-        #map.save(f"./output/site/mapas/ruralidade/{UF}.html")
+    export_map(map, f"{diretorio}{arquivo}.html", export)
+    
     return map
 
 def gera_mapa_ruralidade(UF):
@@ -766,3 +610,39 @@ def format_population(x):
 
 def format_percentage(x):
     return f'{100*x:.2f}%'
+
+def export_map(map, path, export=False):
+    if export:    
+        html_map = map.get_root().render()
+        custom_scrollbar_css = """
+        <style>
+        .scrollbar {
+            background-color: #FAFAFA;
+            overflow-y: auto;
+            margin: 15px 0px;
+            padding: 0px 10px;
+            max-height: 200px;
+            border: 1px solid #EEE;
+        }
+        .scrollbar::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+        .scrollbar::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+        .scrollbar::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #f1942f;
+        }
+        </style>
+        """ # Se tiver dos cadastros PCT, alterar para -> max-height: 250px;
+        html_map = html_map.replace(
+            "</head>",
+            f"{custom_scrollbar_css}</head>"
+        )
+        with open(path, "w", encoding='utf-8') as f:
+            f.write(html_map)
