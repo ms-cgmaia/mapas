@@ -9,7 +9,7 @@ if [ "$1" = "True" ] || [ "$1" = "true" ]; then
 fi
 
 #criar pastas necessárias para exportação dos mapas, caso não existam
-for dir in "../output/site/mapas/cobertura/" "../output/site/mapas/equipe/" "../output/site/mapas/densidade/"; do
+for dir in "./output/site/mapas/cobertura/" "./output/site/mapas/equipe/" "./output/site/mapas/densidade/"; do
     if [ ! -d "$dir" ]; then
         if mkdir -p "$dir"; then
             echo "[OK] pasta criada: $dir"
