@@ -47,7 +47,7 @@ python scripts/reconstruir_dados.py
 ```
 ou
 
-Caso deseje remover os arquivos de entrada após a reconstrução, passe o parâmetro `True` ou `true`:
+Caso deseje remover os arquivos de entrada após a reconstrução, passe o parâmetro `True`:
 ```python
 python scripts/reconstruir_dados.py True
 ```
