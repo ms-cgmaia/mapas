@@ -31,6 +31,7 @@ from folium.plugins import MarkerCluster
 import locale
 locale.setlocale(locale.LC_ALL, '')
 from shapely import Point
+from collections import defaultdict
 
 #Situação detalhada do Setor Censitário
 ds_cd_sit = { 
@@ -126,7 +127,7 @@ nome_macro = {
 	'2916': 'Extremo Sul (Teixeira de Freitas)',
 	'2917': 'Centro-Leste (Feira de Santana)',
 	'2918': 'Centro - Norte (Jacobina)',
-	'3101': 'Sul (Poços de Caldas)',
+	'3101': 'Sul (Varginha)',
 	'3102': 'Centro Sul (São João Del Rei)',
 	'3103': 'Centro (Belo Horizonte)',
 	'3104': 'Jequitinhonha (Diamantina)',
@@ -198,7 +199,6 @@ nome_macro = {
 	'5302': 'Distrito Federal (Brasília)',
 }
 
-
 # estilos da scroll bar para injection no css
 custom_scrollbar_css = """
         <style>
@@ -227,6 +227,31 @@ custom_scrollbar_css = """
         </style>
         """
 
+# bases comuns
+shape_municipio = gpd.read_file('../shapes/municipios.gpkg')
+macro = gpd.read_file('../shapes/macro.gpkg')
+macro = macro.astype({'CO_MACRORREGIONAL':'Int64'})
+
+def get_estados():
+    return co_uf_ibge.keys()
+
+def get_macros():
+    macro = gpd.read_file('../shapes/macro.gpkg')
+    macro = macro.astype({'CO_MACRORREGIONAL':'Int64'})
+    lista_macro = macro[['CD_MUN', 'CD_UF', 'CO_MACRORREGIONAL', 'NO_MACRORREGIONAL']].rename(columns={'CD_UF':'SG_UF'})
+    nome_macro = lista_macro[['CO_MACRORREGIONAL','NO_MACRORREGIONAL']].set_index('CO_MACRORREGIONAL').to_dict()
+    nome_macro = nome_macro.get('NO_MACRORREGIONAL')
+
+    uf_macro_dict = defaultdict(set)
+
+    for uf, macro in zip(lista_macro["SG_UF"], lista_macro["CO_MACRORREGIONAL"]):
+        uf_macro_dict[sg_uf_ibge[str(uf)]].add(macro)
+    return uf_macro_dict
+
+# TODO: colocar o representative_point() ao invés do centro da Macro
+def get_centro_macro(MACRO):
+    return macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)].representative_point()
+
 def format_ine(numero):
     try:
         return f'{int(numero):010d}'
@@ -239,7 +264,7 @@ def format_cnes(numero):
     except Exception:
         return None
     
-    # carregando shape das unidades
+# carregando shape das unidades
 #unidades = gpd.read_file('./'shapes'/unidades_cnes.gpkg')
 def get_unidades(UF='DF', MACRO=None, ativas=True):
     if os.path.exists('../shapes/unidades_cnes_realocadas.gpkg'):
@@ -447,12 +472,16 @@ def get_setores(UF, MACRO=None):
 
 def gera_mapa_densidade(UF, MACRO=None, export=False):
     if MACRO is None:
-        unidades = get_unidades(UF, ativas=True)
+        #Apenas UF por municipio
+        unidades = get_unidades(UF)
         if os.path.exists('../shapes/estados.json'):
             estados = gpd.read_file('../shapes/estados.json')
         elif os.path.exists('./shapes/estados.json'):
             estados = gpd.read_file('./shapes/estados.json')
-        setores = get_setores(UF, None)
+        #setores = get_setores(UF, None)
+        setores = shape_municipio.loc[shape_municipio.sg_uf==UF]
+        setores['densidade'] = setores.populacao/setores.area_km2
+        setores['geoid'] = setores.index.astype(str)
         estados_uf = estados.loc[estados.SIGLA==UF]
         centroUF = estados_uf.geometry.centroid.values
         arquivo = UF
@@ -468,20 +497,30 @@ def gera_mapa_densidade(UF, MACRO=None, export=False):
         centroUF = macro.loc[macro.CO_MACRORREGIONAL == int(MACRO)].geometry.centroid.values
         arquivo = f'{UF}_{MACRO}'
 
-    setores['CD_SIT'] = setores['CD_SIT'].astype(int)
-    setores['CD_SIT'] = setores['CD_SIT'].map(ds_cd_sit)
-    setores['CD_TIPO'] = setores['CD_TIPO'].astype(int)
-    setores['CD_TIPO'] = setores['CD_TIPO'].map(ds_cd_tipo)
+        setores['CD_SIT'] = setores['CD_SIT'].astype(int)
+        setores['CD_SIT'] = setores['CD_SIT'].map(ds_cd_sit)
+        setores['CD_TIPO'] = setores['CD_TIPO'].astype(int)
+        setores['CD_TIPO'] = setores['CD_TIPO'].map(ds_cd_tipo)
+        shape_tipos = setores[['CD_TIPO', 'geometry']].dissolve(by='CD_TIPO').reset_index()
+
+        # Shapes Complementares
+        quilombos = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento quilombola']
+        assentamentos = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrovila do PA']
+        indigenas = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento indígena']
+    
+        if os.path.exists('../shapes/RiscosGeologicos.gpkg'):
+                riscos = gpd.read_file('../shapes/RiscosGeologicos.gpkg')
+        elif os.path.exists('./shapes/RiscosGeologicos.gpkg'):
+                riscos = gpd.read_file('./shapes/RiscosGeologicos.gpkg')
+        riscos = riscos.loc[riscos.uf == UF]
+        riscos['tipo'] = riscos.apply(lambda row: ' • '.join([str(x) for x in [row['tipolo_g1'], row['tipolo_g2'], row['tipolo_g3'], row['tipolo_g4'], row['tipolo_g5']] if x and isinstance(x, str) and len(x) > 1]), axis=1)
+        
+    
     unidades_cnes = unidades.groupby(['CO_CNES','NO_FANTASIA','NO_MUNICIPIO','NO_LOGRADOURO','DS_TIPO_UNIDADE']).agg({'CO_EQUIPE':list, 'TP_EQUIPE':list, 'DS_EQUIPE':list,'SG_EQUIPE':list,'CO_AREA':list, 'NO_REFERENCIA':list, 'ST_EQUIPE_VALIDA':list,'CADASTROS_ACOMPANHADOS':list,'CADASTROS_VINCULADOS':list, 'CADASTROS_PREVINE':list, 'PARAMETRO_CADASTRAL':list, 'LATITUDE':'mean', 'LONGITUDE':'mean', 'DENTRO_MUNICIPIO':'max'}).reset_index()
     # Após juntar as médias das coordenadas (que deveriam ser iguais), a geometria é recalculada
     unidades_cnes['geometry'] = [Point(point[0],point[1]) for point in zip(unidades_cnes.LONGITUDE, unidades_cnes.LATITUDE)]
     # Dissolve os setores por tipo
-    shape_tipos = setores[['CD_TIPO', 'geometry']].dissolve(by='CD_TIPO').reset_index()
-
-    # Shapes Complementares
-    quilombos = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento quilombola']
-    assentamentos = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrovila do PA']
-    indigenas = shape_tipos.loc[shape_tipos.CD_TIPO=='Agrupamento indígena']
+    
 
     # Criando o mapa com tile de fundo
     map = folium.Map(location=[centroUF.y,centroUF.x], tiles = 'cartodbpositron', control_scale=True, prefer_canvas=True, zoom_start=11)
@@ -492,62 +531,112 @@ def gera_mapa_densidade(UF, MACRO=None, export=False):
         caixa = create_box(cnes, export)
         folium.Marker([cnes.geometry.y, cnes.geometry.x], icon=folium.Icon(color="orange", icon="house-medical", prefix='fa'), popup=caixa, tooltip = cnes.NO_FANTASIA).add_to(marker_cluster)
     
-    # Acrescentando os shapes
-    # shape dos setores censitarios
-    folium.Choropleth(
-        geo_data=setores,
-        name='Densidade demográfica',
-        data=setores,
-        columns=['geoid', 'Log_Densidade'],
-        key_on='feature.id',
-        fill_color='YlOrRd',
-        fill_opacity=0.8,
-        line_opacity=0.5,
-        line_color='black',
-        line_weight=.5,
-        smooth_factor=1.0,
-        nan_fill_color = "White",
-        legend_name= 'Raiz quadrada da densidade demográfica'
+    if MACRO is None:
+         # shape dos setores censitarios
+        folium.Choropleth(
+            geo_data=setores,
+            name='Densidade demográfica',
+            data=setores,
+            columns=['geoid', 'densidade'],
+            key_on='feature.id',
+            fill_color='YlOrRd',
+            fill_opacity=0.8,
+            line_opacity=0.5,
+            line_color='black',
+            line_weight=.5,
+            smooth_factor=1.0,
+            nan_fill_color = "White",
+            legend_name= 'Percentual urbano'
+            ).add_to(map)
+        # Criando o layer com os tooltips por cima de tudo
+        setores['pop_format'] = setores['populacao'].apply(lambda x: f"{x:,.0f}".replace(",", "."))
+        setores['set_format'] = setores['setores_censitarios'].apply(lambda x: f"{x:,.0f}".replace(",", "."))
+        folium.features.GeoJson(setores, name='Informações dos municipios',
+            style_function = lambda x: {'color':'transparent','fillColor':'transparent','weight':0},
+            tooltip = folium.features.GeoJsonTooltip(fields=['no_municipio','no_macrorregional','pop_format','set_format'],
+                                                    aliases = ['Nome Município', 'Nome Macrorregião de Saúde', 'População residente', 'Númenro de setores censitários'],
+                                                    labels=True, sticky=True),
+            highlight_function = lambda x: {'fillColor': '#ffffff', 'color':'#ffffff', 'fillOpacity': .5, 'weight': 0.1}).add_to(map)
+    
+    else:
+        # Acrescentando os shapes
+        # shape dos setores censitarios
+        folium.Choropleth(
+            geo_data=setores,
+            name='Densidade demográfica',
+            data=setores,
+            columns=['geoid', 'Log_Densidade'],
+            key_on='feature.id',
+            fill_color='YlOrRd',
+            fill_opacity=0.8,
+            line_opacity=0.5,
+            line_color='black',
+            line_weight=.5,
+            smooth_factor=1.0,
+            nan_fill_color = "White",
+            legend_name= 'Raiz quadrada da densidade demográfica'
+            ).add_to(map)
+
+        # Criando o layer de quilombos
+        folium.features.GeoJson(quilombos, name='Agrupamentos Quilombolas',
+            style_function = lambda x: {'fillColor': '#669966', 
+                                            'color':'#669966', 
+                                            'fillOpacity': .5, 
+                                            'weight': 0.1,
+                                            'dash_array':'2'}
+            ).add_to(map)
+
+        # Criando o layer de assentamentos
+        folium.features.GeoJson(assentamentos, name='Agrovila: Projeto de Assentamento',
+            style_function = lambda x: {'fillColor': '#97d963', 
+                                            'color':'#97d963', 
+                                            'fillOpacity': .5, 
+                                            'weight': 0.1,
+                                            'dash_array':'2'}
+            ).add_to(map)
+
+        # Criando o layer de indigenas
+        folium.features.GeoJson(indigenas, name='Agrupamentos Indígenas',
+            style_function = lambda x: {'fillColor': '#c5dd2a', 
+                                            'color':'#c5dd2a', 
+                                            'fillOpacity': .5, 
+                                            'weight': 0.1,
+                                            'dash_array':'2'}
+            ).add_to(map)
+
+        # Criando o layer com os tooltips por cima de tudo
+        folium.features.GeoJson(setores, name='Informações dos setores',
+            style_function = lambda x: {'color':'transparent','fillColor':'transparent','weight':0},
+            tooltip = folium.features.GeoJsonTooltip(fields=['CD_SIT','CD_TIPO','v0001'],
+                                                    aliases = ['Situação detalhada', 'Tipo do setor', 'População residente'],
+                                                    labels=True, sticky=True),
+            highlight_function = lambda x: {'fillColor': '#ffffff', 'color':'#ffffff', 'fillOpacity': .5, 'weight': 0.1}).add_to(map)
+
+        # Criando o layer de Riscos Geológicos
+        folium.features.GeoJson(riscos, name='Riscos Geológicos',
+            style_function = lambda x: {
+                'fillColor': '#A31D1D', 
+                'color':'#A31D1D', 
+                'fillOpacity': .9, 
+                'weight': 0.1,
+                'dash_array':'2'},
+            tooltip = folium.features.GeoJsonTooltip(
+                fields=['descricao','tipo','local','data_setor'],
+                aliases = ['Descrição', 'Tipo de risco', 'Local', 'Data'],
+                style="""       
+                        background-color: white; 
+                        color: black; 
+                        font-size: 12px; 
+                        min-width: 250px;
+                        max-width: 550px; 
+                        word-wrap: break-word; 
+                        white-space: normal;
+                    """,
+                labels=True, sticky=True),
         ).add_to(map)
-
-    # Criando o layer de quilombos
-    folium.features.GeoJson(quilombos, name='Agrupamentos Quilombolas',
-        style_function = lambda x: {'fillColor': '#669966', 
-                                        'color':'#669966', 
-                                        'fillOpacity': .5, 
-                                        'weight': 0.1,
-                                        'dash_array':'2'}
-        ).add_to(map)
-
-    # Criando o layer de assentamentos
-    folium.features.GeoJson(assentamentos, name='Agrovila: Projeto de Assentamento',
-        style_function = lambda x: {'fillColor': '#97d963', 
-                                        'color':'#97d963', 
-                                        'fillOpacity': .5, 
-                                        'weight': 0.1,
-                                        'dash_array':'2'}
-        ).add_to(map)
-
-    # Criando o layer de indigenas
-    folium.features.GeoJson(indigenas, name='Agrupamentos Indígenas',
-        style_function = lambda x: {'fillColor': '#c5dd2a', 
-                                        'color':'#c5dd2a', 
-                                        'fillOpacity': .5, 
-                                        'weight': 0.1,
-                                        'dash_array':'2'}
-        ).add_to(map)
-
-    # Criando o layer com os tooltips por cima de tudo
-    folium.features.GeoJson(setores, name='Informações dos setores',
-        style_function = lambda x: {'color':'transparent','fillColor':'transparent','weight':0},
-        tooltip = folium.features.GeoJsonTooltip(fields=['CD_SIT','CD_TIPO','v0001'],
-                                                aliases = ['Situação detalhada', 'Tipo do setor', 'População residente'],
-                                                labels=True, sticky=False),
-        highlight_function = lambda x: {'fillColor': '#ffffff', 'color':'#ffffff', 'fillOpacity': .5, 'weight': 0.1}).add_to(map)
-
-    # Criando o layer de contorno do estado
-    #folium.features.GeoJson(estados.loc[estados.SIGLA == UF], name=UF, style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)    
-    # Add the marker cluster to the map
+        # Criando o layer de contorno do estado
+        #folium.features.GeoJson(estados.loc[estados.SIGLA == UF], name=UF, style_function = lambda x: {'fillColor': 'transparent', 'color':'steelblue', 'fillOpacity': 0, 'weight': 1,'dash_array':'2'}).add_to(map)    
+        # Add the marker cluster to the map
     
     oms = OverlappingMarkerSpiderfier(
         keep_spiderfied=True,  # Markers remain spiderfied after clicking
@@ -557,8 +646,9 @@ def gera_mapa_densidade(UF, MACRO=None, export=False):
         )
     oms.add_to(map)
 
-
     marker_cluster.add_to(map)
+    folium.plugins.Geocoder().add_to(map)
+    Draw().add_to(map)
 
     folium.LayerControl().add_to(map)
     
@@ -578,7 +668,7 @@ def gera_mapa_densidade(UF, MACRO=None, export=False):
     
     return map
 
-def gera_mapa_ruralidade(UF):
+def gera_mapa_ruralidade(UF, MACRO=None, export=False):
     print('Em breve')
     #return 
 
